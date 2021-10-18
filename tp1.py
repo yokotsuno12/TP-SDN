@@ -11,7 +11,9 @@ def PPV(X,Y):
     R= 0,8*X.shape[0] #Nombre de données reference
     Ref = X[R:]
     Test= X[:R]
-    for i in range(X.shape-R):
+    for i in Test:
+           metrics.pairwise.euclidean_distances(Ref,i)
+        
         
 
 print('Hello World!')
