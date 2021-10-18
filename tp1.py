@@ -8,13 +8,14 @@ X = iris.data
 Y = iris.target
 
 def PPV(X,Y):
-    R= 0,8*X.shape[0] #Nombre de données reference
-    Ref = X[R:]
-    Test= X[:R]
-    for i in Test:
-        L= metrics.pairwise.euclidean_distances(Ref,i)
-        argmin(L)
-        Ypred.append( Y[argmin])
+    Ypred=[]
+    for i,e in enumerate(X):
+        L= metrics.pairwise.euclidean_distances(X,e[np.newaxis])
+        np.argmin(L)
+        L =np.delete(L,i)
+        Ypred.append(Y[np.argmin])
+    return Ypred
+
         
 
 
