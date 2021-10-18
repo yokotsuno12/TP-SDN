@@ -136,6 +136,7 @@ from sklearn.naive_bayes import MultinomialNB
 clf = MultinomialNB()
 clf.fit(X, Y)
 MultinomialNB()
-print(clf.predict(X))
+K = clf.predict(X)
+CBN(X,Y)==K #la réponse est non!!! Ce n'est pas la même manière de calculer des probabilités!! Donc pas le même résultat (j'espère)
 
 
