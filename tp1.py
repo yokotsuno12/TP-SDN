@@ -80,12 +80,7 @@ def PPV_mod(k, X, Y) :
 
 # Classifieur Bayesien Naïf
 
-def P(Y,i):
-    a=Y.size
-    b=sum(Y==i)
-    return a/b
-
-def baricentre(X, Y):
+def baricentre(X, Y): #barycentre de toutes les données (sert pas au final, mais c'était un essai)
     b_s = []
     for e in np.unique(Y):
         A = X[np.where(Y == e)]
@@ -93,7 +88,7 @@ def baricentre(X, Y):
     return np.array(b_s)
 
 
-def Bar2(X,Y,k) :
+def Bar2(X,Y,k) : #Barycentre de la classe k
     G = X[np.where(Y==k)]
     H = np.mean(G, axis=0)
     return H
@@ -102,14 +97,19 @@ def d(x,X,k): #On a une donnée x, on ne connait pas son emplacement dans X, don
     b= np.linalg.norm(x - Bar2(X, Y, k))
     return b
 
-def P2(x, X, i, k) :
+def P2(x, X, i, k) : #Comme définie dans le TP
     IT = np.unique(Y)
     u = Y[i]
     Q = np.sum(d(x, X, j) for j in IT)
     a = (1-d(x, X ,u))/Q
     return a
+
+def P(Y,i): #Comme définie dans le TP
+    a=Y.size
+    b=sum(Y==i)
+    return a/b
     
-def CBN(X,Y) : 
+def CBN(X,Y) : #Fonction demandée
     IT = np.unique(Y)
     T =[]
     for j in range (0,len(Y)):
