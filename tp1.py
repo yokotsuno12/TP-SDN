@@ -80,4 +80,7 @@ def PPV_mod(k, X, Y) :
 
 # Classifieur Bayesien Naïf
 
-
+def P(Y,i):
+    a=Y.size
+    b=sum(Y==i)
+    return a/b
