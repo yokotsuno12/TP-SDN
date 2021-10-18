@@ -18,3 +18,32 @@ def PPV(X,Y):
 a=PPV(X, Y)
 print(a)
 print(Y)
+
+def PPV2(X,Y):
+    s=0
+    for i in range(0, len(Y)):
+        if PPV(X,Y)[i] == Y[i]:
+            s+=0
+        else : 
+            s+=1
+    print(s*100/len(Y), "%")
+
+# Question 3 :     
+#print(PPV(X,Y))
+#print(PPV2(X,Y))
+
+# Question 4 : 
+
+from sklearn.neighbors import KNeighborsClassifier
+neigh = KNeighborsClassifier(n_neighbors=1)
+neigh.fit(X,Y)
+Ychapeau = neigh.predict(X)
+print(Ychapeau)
+
+
+
+
+
+
+
+
