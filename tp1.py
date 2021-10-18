@@ -17,7 +17,14 @@ def PPV(X,Y):
         Ypred.append( Y[argmin])
         
 
-print('Hello World!')
 
+def PPV2(X,Y):
+    s=0
+    for i in range(0, len(Y)):
+        if PPV(X,Y)[i] == Y[i]:
+            s+=0
+        else : 
+            s+=1
+    return s/n
 
     
