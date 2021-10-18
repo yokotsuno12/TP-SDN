@@ -91,3 +91,13 @@ def baricentre(X, Y):
         A = X[np.where(Y == e)]
         b_s.append(np.mean(A, axis=0))
     return np.array(b_s)
+
+# Question 3 : 
+
+from sklearn.naive_bayes import MultinomialNB
+clf = MultinomialNB()
+clf.fit(X, Y)
+MultinomialNB()
+print(clf.predict(X))
+
+
