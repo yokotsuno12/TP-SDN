@@ -25,6 +25,6 @@ def PPV2(X,Y):
             s+=0
         else : 
             s+=1
-    return s/n
+    print(s*100/len(Y), "%")
 
     
