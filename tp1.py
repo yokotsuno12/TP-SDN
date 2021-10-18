@@ -77,3 +77,7 @@ def PPV_mod(k, X, Y) :
         M = list(Y[G])
         Ypred.append(max(M, key=M.count))
     return np.array(Ypred)
+
+# Classifieur Bayesien Naïf
+
+
