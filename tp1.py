@@ -53,6 +53,14 @@ def PPV3(Ychapeau,Y) :
 PPV3(Ychapeau,Y) #On obtient 0% parce que l'algorithme KN prend comme PPV d'une donnée la donnée elle-même (de distance 0 par rapport à elle-même)
 PPV3(PPV(X,Y),Y) #En revanche, dans notre algorithme, nous avons supprimé la possibilité de prendre comme PPV d'une donnée la donnée elle-même (en supprimant la diagonale de la matrice des distances).
 
-
-
+neigh2 = KNeighborsClassifier(n_neighbors=2)
+neigh2.fit(X,Y)
+Ychapeau2 = neigh2.predict(X)
+print(Ychapeau2)
+print(PPV3(Ychapeau2,Y))
+neigh3 = KNeighborsClassifier(n_neighbors=3)
+neigh3.fit(X,Y)
+Ychapeau3 = neigh3.predict(X)
+print(Ychapeau3)
+print(PPV3(Ychapeau3,Y))
 
