@@ -130,13 +130,20 @@ print('\n')
 print('CBN pour iris :\n',CBN(X,Y),'\n')
 print('Erreur CBN pour iris\n',Erreur3(X,Y),'\n')
 
+
 # Question 3 : 
 
-from sklearn.naive_bayes import MultinomialNB
-clf = MultinomialNB()
+from sklearn.naive_bayes import GaussianNB
+clf = GaussianNB()
 clf.fit(X, Y)
-MultinomialNB()
+GaussianNB()
 K = clf.predict(X)
-CBN(X,Y)==K #la réponse est non!!! Ce n'est pas la même manière de calculer des probabilités!! Donc pas le même résultat (j'espère)
+CBN(X,Y)==K #la réponse est non!!! Ce n'est pas la même manière de calculer des probabilités!! Donc pas le même résultat 
 
-
+def Erreur4(X,Y):
+    L = K
+    N = sum(L==Y)
+    return ((len(L)-N)/len(L))*100 
+print('\n')
+print('classificateur gaussien pour iris :\n',K,'\n')
+print('Erreur classificateur gaussien pour iris\n',Erreur4(X,Y),'\n')
