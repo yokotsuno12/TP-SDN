@@ -41,8 +41,17 @@ Ychapeau = neigh.predict(X)
 print(Ychapeau)
 
 
+def PPV3(Ychapeau,Y) : 
+    s=0
+    for i in range(0, len(Y)):
+        if Ychapeau[i] == Y[i]:
+            s+=0
+        else : 
+            s+=1
+    print(s*100/len(Y), "%")
 
-
+PPV3(Ychapeau,Y) #On obtient 0% parce que l'algorithme KN prend comme PPV d'une donnée la donnée elle-même (de distance 0 par rapport à elle-même)
+PPV3(PPV(X,Y),Y) #En revanche, dans notre algorithme, nous avons supprimé la possibilité de prendre comme PPV d'une donnée la donnée elle-même (en supprimant la diagonale de la matrice des distances).
 
 
 
