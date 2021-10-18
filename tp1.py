@@ -11,6 +11,8 @@ def PPV(X,Y):
     R= 0,8*X.shape[0] #Nombre de données reference
     Ref = X[R:]
     Test= X[:R]
+    for i in range(X.shape-R):
+        
 
 print('Hello World!')
 
