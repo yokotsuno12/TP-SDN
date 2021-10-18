@@ -101,13 +101,14 @@ def P2(x, X, i, k) : #Comme définie dans le TP
     IT = np.unique(Y)
     u = Y[i]
     Q = np.sum(d(x, X, j) for j in IT)
-    a = (1-d(x, X ,u))/Q
+    a = 1-(d(x, X ,u)/Q)
     return a
+    
 
 def P(Y,i): #Comme définie dans le TP
     a=Y.size
     b=sum(Y==i)
-    return a/b
+    return b/a
     
 def CBN(X,Y) : #Fonction demandée
     IT = np.unique(Y)
