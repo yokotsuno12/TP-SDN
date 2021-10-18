@@ -84,3 +84,10 @@ def P(Y,i):
     a=Y.size
     b=sum(Y==i)
     return a/b
+
+def baricentre(X, Y):
+    b_s = []
+    for e in np.unique(Y):
+        A = X[np.where(Y == e)]
+        b_s.append(np.mean(A, axis=0))
+    return np.array(b_s)
