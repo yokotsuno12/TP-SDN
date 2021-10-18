@@ -92,6 +92,32 @@ def baricentre(X, Y):
         b_s.append(np.mean(A, axis=0))
     return np.array(b_s)
 
+
+def Bar2(X,Y,k) :
+    G = X[np.where(Y==k)]
+    H = np.mean(G, axis=0)
+    return H
+
+def d(x,X,k): #On a une donnée x, on ne connait pas son emplacement dans X, donc on ne sait pas à quelle classe elle appartient. On définit cette fonction pour calculer la distance de cette donnée avec le barycentre de la classe k. 
+    b= np.linalg.norm(x - Bar2(X, Y, k))
+    return b
+
+def P2(x, X, i, k) :
+    IT = np.unique(Y)
+    u = Y[i]
+    Q = np.sum(d(x, X, j) for j in IT)
+    a = (1-d(x, X ,u))/Q
+    return a
+    
+def CBN(X,Y) : 
+    IT = np.unique(Y)
+    T =[]
+    for j in range (0,len(Y)):
+        L = [P(Y, Y[j])*P2(X[j], X, i, Y[j]) for i in range(0,len(Y)) ]
+        T.append(Y[argmax(L)])
+    return T
+print(CBN(X,Y))    
+
 # Question 2:
 
 def Erreur3(X,Y):
