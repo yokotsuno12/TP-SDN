@@ -12,8 +12,9 @@ def PPV(X,Y):
     Ref = X[R:]
     Test= X[:R]
     for i in Test:
-           metrics.pairwise.euclidean_distances(Ref,i)
-        
+        L= metrics.pairwise.euclidean_distances(Ref,i)
+        argmin(L)
+        Ypred.append( Y[argmin])
         
 
 print('Hello World!')
