@@ -9,5 +9,7 @@ Y = iris.target
 
 def PPV(X,Y):
     R= 0,8*X.shape[0] #Nombre de données reference
-    T =0,2*X.shape[0] #Nombre de données test
+    Ref = X[R:]
+    Test= X[:R]
+
     
