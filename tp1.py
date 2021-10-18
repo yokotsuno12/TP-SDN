@@ -1,12 +1,15 @@
+from sklearn import*
+import matplotlib.pyplot as plt
+import numpy as np
 
-from numpy import *
-from sklearn import *
-import sklearn.preprocessing as sp #pour iris 
 
 iris = datasets.load_iris()
 X = iris.data
 Y = iris.target
 
+"Plus Proche Voisin"
+
+"1)"
 def PPV(X,Y):
     Ypred=[]
     for i,e in enumerate(X):
@@ -15,22 +18,19 @@ def PPV(X,Y):
         Ypred.append(Y[np.argmin(L)])
     return np.array(Ypred)
 
-a=PPV(X, Y)
-print(a)
-print(Y)
 
-def PPV2(X,Y):
-    s=0
-    for i in range(0, len(Y)):
-        if PPV(X,Y)[i] == Y[i]:
-            s+=0
-        else : 
-            s+=1
-    print(s*100/len(Y), "%")
+"2)"
 
-# Question 3 :     
-#print(PPV(X,Y))
-#print(PPV2(X,Y))
+def Erreur(X,Y):
+    L = PPV(X,Y)
+    N = sum(L==Y)
+    return ((L.size-N)/L.size)*100 
+
+
+"3)"
+print('\n')
+print('PPV pour iris :\n',PPV(X,Y),'\n')
+print('Erreur PPV pour iris\n',Erreur(X,Y),'\n')
 
 # Question 4 : 
 
