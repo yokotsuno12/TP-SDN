@@ -64,3 +64,16 @@ Ychapeau3 = neigh3.predict(X)
 print(Ychapeau3)
 print(PPV3(Ychapeau3,Y))
 
+# Question 5, BONUS : 
+
+def PPV_mod(k, X, Y) :
+    Ypred=[]
+    Ypred2= []
+    for i,e in enumerate(X):
+        L= metrics.pairwise.euclidean_distances(X,e[np.newaxis])
+        L=L.reshape(Y.size)
+        L2 = np.argsort(L)
+        G = [L2[j] for j in range(1,k+1)]
+        M = list(Y[G])
+        Ypred.append(max(M, key=M.count))
+    return np.array(Ypred)
