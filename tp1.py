@@ -94,14 +94,14 @@ def baricentre(X, Y):
 
 # Question 2:
 
-def Erreur2(X,Y):
+def Erreur3(X,Y):
     L = CBN(X,Y)
     N = sum(L==Y)
     return ((L.size-N)/L.size)*100 
 
 print('\n')
 print('CBN pour iris :\n',CBN(X,Y),'\n')
-print('Erreur CBN pour iris\n',Erreur2(X,Y),'\n')
+print('Erreur CBN pour iris\n',Erreur3(X,Y),'\n')
 
 # Question 3 : 
 
