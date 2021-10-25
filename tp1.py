@@ -25,10 +25,10 @@ def PPV(X,Y):
 
     """
     Ypred = []
-    for i, e in enumerate(X):
-        L = metrics.pairwise.euclidean_distances(X, e[np.newaxis])
-        L = np.delete(L, i)
-        Ypred.append(Y[np.argmin(L)])
+    for i, e in enumerate(X):                                                   #(i :indice de l'élément e, i et e parcourent X)
+        L = metrics.pairwise.euclidean_distances(X, e[np.newaxis])              #Les distances euclidiennes de tous les éléments de X avec e
+        L = np.delete(L, i)                                                     #On enlève la distance de l'élément de X d'indice i (c'est donc e) à e : elle est toujours égale à 0, si on ne l'enlevait pas ce serait la diagonale de la matrice donnée par la fonction. Dans l'autre algorithme, cette valeur n'est pas éliminée et c'est ce qui fait qu'il est "moins bon". 
+        Ypred.append(Y[np.argmin(L)])                                           #On ajoute à Ypred l'indice de la distance minimale de tous les éléments de X avec e. Grâce à la ligne précédente, ce n'est pas i !! Donc le plus proche voisin sélectionné pour e n'est pas e lui-même.
     return np.array(Ypred)
 
 
@@ -87,8 +87,8 @@ Ychapeau = neigh.predict(X)
 print(Ychapeau)
 
 print(Erreur(Ychapeau, Y))
-# On obtient 0% parce que l'algorithme KN prend comme PPV d'une donnée
-# la donnée elle-même (de distance 0 par rapport à elle-même)
+# On obtient 0% parce que l'algorithme KN prend comme Plus Proche Voisin d'une donnée A
+# la donnée A elle-même (de distance 0 par rapport à elle-même, donc toujours minimale par rapport aux autres distances)
 
 print(ErreurPPV(X, Y))
 # En revanche, dans notre algorithme, nous avons supprimé la possibilité
@@ -133,15 +133,15 @@ def PPV_mod(k, X, Y):
         L = metrics.pairwise.euclidean_distances(X, e[np.newaxis])
         L = L.reshape(Y.size)
         L2 = np.argsort(L)
-        G = [L2[j] for j in range(1, k+1)]
-        M = list(Y[G])
-        Ypred.append(max(M, key=M.count))
+        G = [L2[j] for j in range(1, k+1)]                              #range commence à un car on veut exclure le premier indice qui correspond la distance 0 (donc à e). 
+        M = list(Y[G])                                                  #On le transforme en liste, c'est plus simple pour la ligne suivante. 
+        Ypred.append(max(M, key=M.count))                               #M.count comptabilise l'apparition d'une valeur (ici, la valeur correspond à une classe) dans M. On prend le max de M.count, donc en gros ça nous renvoie la valeur apparaissant le plus souvent dans M, c'est-à-dire la classe majoritaire dans M. 
     return np.array(Ypred)
 
 # Classifieur Bayesien Naïf
 
 
-def baricentre(X, Y):
+def baricentre(X, Y):                                                   
     """
     Baricentre de toutes les classes.
     Calcule le baricentre de toutes les classes comme étant la moyenne des
@@ -236,7 +236,7 @@ def P2(x, k, baricentre):
     return a
 
 
-def CBN(X, Y):
+def CBN(X, Y):                                  
     """
     Implémente L'agorithme du classifieur bayesien Naif.
 
@@ -258,7 +258,7 @@ def CBN(X, Y):
 
     """
     ls_p = P1(Y)
-    ls_baricentre = baricentre(X, Y)
+    ls_baricentre = baricentre(X, Y)                                        #Ici, Léo a optimisé le code : Avant, on recalculait les barycentres pour chaque point et ça augmentait la complexité de l'algorithme. 
     classes = np.unique(Y)
 
     T = []
