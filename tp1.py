@@ -1,5 +1,4 @@
-from sklearn import*
-import matplotlib.pyplot as plt
+from sklearn import metrics, datasets
 import numpy as np
 
 
@@ -7,143 +6,300 @@ iris = datasets.load_iris()
 X = iris.data
 Y = iris.target
 
-"Plus Proche Voisin"
-
-"1)"
+# 1)
 def PPV(X,Y):
-    Ypred=[]
-    for i,e in enumerate(X):
-        L= metrics.pairwise.euclidean_distances(X,e[np.newaxis])
-        L = np.delete(L,i)
-        Ypred.append(Y[np.argmin(L)])
+    """
+    Evalue l'algorithme du Plus Proche Voisin avec la cross validation.
+
+    Parameters
+    ----------
+    X : numpy.ndarray
+        Une matrice de dimension 2 où chaque ligne correspond à une valeur
+    Y : array-like
+        Les labels
+
+    Returns
+    -------
+    numpy.array
+        Les predictions
+
+    """
+    Ypred = []
+    for i, e in enumerate(X):                                                   #(i :indice de l'élément e, i et e parcourent X)
+        L = metrics.pairwise.euclidean_distances(X, e[np.newaxis])              #Les distances euclidiennes de tous les éléments de X avec e
+        L = np.delete(L, i)                                                     #On enlève la distance de l'élément de X d'indice i (c'est donc e) à e : elle est toujours égale à 0, si on ne l'enlevait pas ce serait la diagonale de la matrice donnée par la fonction. Dans l'autre algorithme, cette valeur n'est pas éliminée et c'est ce qui fait qu'il est "moins bon". 
+        Ypred.append(Y[np.argmin(L)])                                           #On ajoute à Ypred l'indice de la distance minimale de tous les éléments de X avec e. Grâce à la ligne précédente, ce n'est pas i !! Donc le plus proche voisin sélectionné pour e n'est pas e lui-même.
     return np.array(Ypred)
 
 
-"2)"
+# 2)
 
-def Erreur(X,Y):
-    L = PPV(X,Y)
-    N = sum(L==Y)
-    return ((L.size-N)/L.size)*100 
+def Erreur(X, Y):
+    """
+    Calcule le nombre de valeur pour lesquelles X est different de Y.
+
+    Parameters
+    ----------
+    X : numpy.array
+        Le premier vecteur
+    Y : numpy.array
+        Le second vecteur
+
+    Returns
+    -------
+    float
+        Le pourcentage de valeurs différentes
+
+    """
+    N = X.size - sum(X == Y)
+    return N / X.size * 100
 
 
-"3)"
-print('\n')
-print('PPV pour iris :\n',PPV(X,Y),'\n')
-print('Erreur PPV pour iris\n',Erreur(X,Y),'\n')
+def ErreurPPV(X, Y):
+    return Erreur(PPV(X, Y), Y)
 
-# Question 4 : 
+
+def PPV3(Ychapeau,Y) :
+    """
+    Un autre algorithme pour calculer l'erreur
+    """
+    s = 0
+    for i in range(0, len(Y)):
+        if Ychapeau[i] == Y[i]:
+            s += 0
+        else:
+            s += 1
+    return s*100 / len(Y)
+
+
+# 3)
+
+print('PPV pour iris :\n', PPV(X, Y), '\n')
+print('Erreur PPV pour iris\n\t', ErreurPPV(X, Y), '\n')
+
+# Question 4 :
 
 from sklearn.neighbors import KNeighborsClassifier
+
 neigh = KNeighborsClassifier(n_neighbors=1)
-neigh.fit(X,Y)
+neigh.fit(X, Y)
 Ychapeau = neigh.predict(X)
 print(Ychapeau)
 
+print(Erreur(Ychapeau, Y))
+# On obtient 0% parce que l'algorithme KN prend comme Plus Proche Voisin d'une donnée A
+# la donnée A elle-même (de distance 0 par rapport à elle-même, donc toujours minimale par rapport aux autres distances)
 
-def PPV3(Ychapeau,Y) : 
-    s=0
-    for i in range(0, len(Y)):
-        if Ychapeau[i] == Y[i]:
-            s+=0
-        else : 
-            s+=1
-    print(s*100/len(Y), "%")
-
-PPV3(Ychapeau,Y) #On obtient 0% parce que l'algorithme KN prend comme PPV d'une donnée la donnée elle-même (de distance 0 par rapport à elle-même)
-PPV3(PPV(X,Y),Y) #En revanche, dans notre algorithme, nous avons supprimé la possibilité de prendre comme PPV d'une donnée la donnée elle-même (en supprimant la diagonale de la matrice des distances).
+print(ErreurPPV(X, Y))
+# En revanche, dans notre algorithme, nous avons supprimé la possibilité
+# de prendre comme PPV d'une donnée la donnée elle-même
+# (en supprimant la diagonale de la matrice des distances).
 
 neigh2 = KNeighborsClassifier(n_neighbors=2)
-neigh2.fit(X,Y)
+neigh2.fit(X, Y)
 Ychapeau2 = neigh2.predict(X)
 print(Ychapeau2)
-print(PPV3(Ychapeau2,Y))
+
+print(Erreur(Ychapeau2, Y))
 neigh3 = KNeighborsClassifier(n_neighbors=3)
-neigh3.fit(X,Y)
+neigh3.fit(X, Y)
 Ychapeau3 = neigh3.predict(X)
 print(Ychapeau3)
-print(PPV3(Ychapeau3,Y))
+print(Erreur(Ychapeau3, Y))
 
-# Question 5, BONUS : 
+# Question 5, BONUS :
 
-def PPV_mod(k, X, Y) :
-    Ypred=[]
-    Ypred2= []
-    for i,e in enumerate(X):
-        L= metrics.pairwise.euclidean_distances(X,e[np.newaxis])
-        L=L.reshape(Y.size)
+
+def PPV_mod(k, X, Y):
+    """
+    Implémentation de l'algorithme des k plus proches voisins.
+
+    Parameters
+    ----------
+    k : int
+        Le nombre de voisins à prendre en considération
+    X : numpy.ndarray
+        Une matrice de dimension 2 où chaque ligne correspond à une valeur
+    Y : array-like
+        Les labels
+
+    Returns
+    -------
+    numpy.array
+        Les predictions
+    """
+    Ypred = []
+    for i, e in enumerate(X):
+        L = metrics.pairwise.euclidean_distances(X, e[np.newaxis])
+        L = L.reshape(Y.size)
         L2 = np.argsort(L)
-        G = [L2[j] for j in range(1,k+1)]
-        M = list(Y[G])
-        Ypred.append(max(M, key=M.count))
+        G = [L2[j] for j in range(1, k+1)]                              #range commence à un car on veut exclure le premier indice qui correspond la distance 0 (donc à e). 
+        M = list(Y[G])                                                  #On le transforme en liste, c'est plus simple pour la ligne suivante. 
+        Ypred.append(max(M, key=M.count))                               #M.count comptabilise l'apparition d'une valeur (ici, la valeur correspond à une classe) dans M. On prend le max de M.count, donc en gros ça nous renvoie la valeur apparaissant le plus souvent dans M, c'est-à-dire la classe majoritaire dans M. 
     return np.array(Ypred)
 
 # Classifieur Bayesien Naïf
 
-def baricentre(X, Y): #barycentre de toutes les données (sert pas au final, mais c'était un essai)
+
+def baricentre(X, Y):                                                   
+    """
+    Baricentre de toutes les classes.
+    Calcule le baricentre de toutes les classes comme étant la moyenne des
+    points composant cette classe.
+
+    Parameters
+    ----------
+    X : numpy.ndarray
+        Tableau à deux dimension, chaque ligne est un point
+    Y : numpy.array
+        Les labels
+
+    Returns
+    -------
+    numpy.array
+        La liste des baricentre de chaque classes (l'ordre des classes est 
+        donnée par la fonction numpy.unique).
+
+    """
     b_s = []
-    for e in np.unique(Y):
-        A = X[np.where(Y == e)]
+    for k in np.unique(Y):
+        A = X[np.where(Y == k)]
         b_s.append(np.mean(A, axis=0))
     return np.array(b_s)
 
 
-def Bar2(X,Y,k) : #Barycentre de la classe k
-    G = X[np.where(Y==k)]
-    H = np.mean(G, axis=0)
-    return H
+def d(a, b):
+    """
+    Calcule la distance entre deux point.
 
-def d(x,X,k): #On a une donnée x, on ne connait pas son emplacement dans X, donc on ne sait pas à quelle classe elle appartient. On définit cette fonction pour calculer la distance de cette donnée avec le barycentre de la classe k. 
-    b= np.linalg.norm(x - Bar2(X, Y, k))
-    return b
+    Parameters
+    ----------
+    a : numpy.array
+        Un vecteur representant le premier point
+    b : numpy.array
+        Un vecteur representant le second point
 
-def P2(x, X, i, k) : #Comme définie dans le TP
-    IT = np.unique(Y)
-    u = Y[i]
-    Q = np.sum(d(x, X, j) for j in IT)
-    a = 1-(d(x, X ,u)/Q)
+    Returns
+    -------
+    float
+        La distance euclidienne entre les deux points.
+
+    """
+    return np.linalg.norm(a - b)
+
+
+def P1(Y):
+    """
+    Pour chaque classe k dans Y, calcule la probabilité d'obtenir un élement
+    de la classe k si on tire un element au hasard.
+
+    Parameters
+    ----------
+    Y : numpy.array
+        Un vecteur représentant les labels
+
+    Returns
+    -------
+    p_s : numpy.array
+        La liste des probabilités pour toutes les classes.
+
+    """
+    p_s = []
+    for e in np.unique(Y):
+        p = sum(Y == e)
+        p_s.append(p/Y.size)
+    return p_s
+
+
+def P2(x, k, baricentre):
+    """
+    Calcule la probabilité d'avoir le point x sachant qu'il appartient à
+    la classe k.
+
+    Parameters
+    ----------
+    x : numpy.array
+        Un vecteur représentant point x
+    k : int
+        La classe à laquelle appartient le point x
+    baricentre : numpy.array
+        Un vecteur representant les baricentres de toutes les classes.
+
+    Returns
+    -------
+    a : float
+        Un nombre entre 0 et 1 représentant la probabilité.
+
+    """
+    sum_dist = np.sum(d(x, bar) for bar in baricentre)
+    a = 1 - (d(x, baricentre[k]) / sum_dist)
     return a
-    
 
-def P(Y,i): #Comme définie dans le TP
-    a=Y.size
-    b=sum(Y==i)
-    return b/a
-    
-def CBN(X,Y) : #Fonction demandée
-    IT = np.unique(Y)
-    T =[]
-    for j in range (0,len(Y)):
-        L = [P(Y, Y[j])*P2(X[j], X, i, Y[j]) for i in range(0,len(Y)) ]
-        T.append(Y[argmax(L)])
-    return T
-print(CBN(X,Y))    
+
+def CBN(X, Y):                                  
+    """
+    Implémente L'agorithme du classifieur bayesien Naif.
+
+    Calcule la prédiction pour chaque données de X en fonction de toutes les
+    autres.
+
+    Parameters
+    ----------
+    X : numpy.array de dimension (num_sample, num_features)
+        Les données
+    Y : numpy.array
+        Vecteur représentant les labels
+
+    Returns
+    -------
+    numpy.array
+        Les prédictions de tous les points en prenant en données
+        d'entrainement tous les autre points.
+
+    """
+    ls_p = P1(Y)
+    ls_baricentre = baricentre(X, Y)                                        #Ici, Léo a optimisé le code : Avant, on recalculait les barycentres pour chaque point et ça augmentait la complexité de l'algorithme. 
+    classes = np.unique(Y)
+
+    T = []
+    for j in range(0, len(Y)):
+        L = [ls_p[k-1] * P2(X[j], k, ls_baricentre) for k in classes]
+        T.append(classes[np.argmax(L)])
+
+    return np.array(T)
+
+
+print(CBN(X, Y))
 
 # Question 2:
 
-def Erreur3(X,Y):
-    L = CBN(X,Y)
-    N = sum(L==Y)
-    return ((len(L)-N)/len(L))*100 
 
-print('\n')
-print('CBN pour iris :\n',CBN(X,Y),'\n')
-print('Erreur CBN pour iris\n',Erreur3(X,Y),'\n')
+def ErreurCBN(X, Y):
+    return Erreur(CBN(X, Y), Y)
 
 
-# Question 3 : 
+print()
+print('CBN pour iris :\n', CBN(X, Y), '\n')
+print('Erreur CBN pour iris\n', ErreurCBN(X, Y), '\n')
+
+# Question 3 :
 
 from sklearn.naive_bayes import GaussianNB
 clf = GaussianNB()
 clf.fit(X, Y)
-GaussianNB()
+# GaussianNB()
 K = clf.predict(X)
-CBN(X,Y)==K #la réponse est non!!! Ce n'est pas la même manière de calculer des probabilités!! Donc pas le même résultat 
+CBN(X, Y) == K
+# la réponse est non!!! Ce n'est pas la même manière de calculer
+# des probabilités!! Donc pas le même résultat
 
-def Erreur4(X,Y):
+
+def Erreur4(X, Y):
     L = K
-    N = sum(L==Y)
-    return ((len(L)-N)/len(L))*100 
-print('\n')
-print('classificateur gaussien pour iris :\n',K,'\n')
-print('Erreur classificateur gaussien pour iris\n',Erreur4(X,Y),'\n')
+    N = sum(L == Y)
+    return ((len(L)-N) / len(L)) * 100
+
+
+print()
+print('classificateur gaussien pour iris :\n', K, '\n')
+print('Erreur classificateur gaussien pour iris\n', Erreur4(X, Y), '\n')
