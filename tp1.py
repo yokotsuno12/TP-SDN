@@ -28,8 +28,8 @@ def PPV(X,Y):
     Ychapeau=[]
     for i, e in enumerate(X):                                      #(i :indice de l'élément e, i et e parcourent X)
         L=metrics.pairwise.euclidean_distances(X,e[np.newaxis])    #Les distances euclidiennes de tous les éléments de X avec e 
-        L=L.reshape(1,-1)                                          #pour que soit l matrice ligne 
-        L2=np.argsort(L)                                            #s est une matrice ligne qui donne les indice des valeur le l ordonnee cad la premier element de s est correspond a lindice de 0 dans l donc la premeir element de s est i
+        L=L.reshape(1,-1)                                          #pour que soit L matrice ligne 
+        L2=np.argsort(L)                                            #L2 est une matrice ligne qui donne les indice des valeur le L ordonnee cad la premier element de L2 est correspond a lindice de 0 dans L donc la premeir element de L2 est i
         Ychapeau.append(Y[L2[0,1]])
     return Ychapeau
 
