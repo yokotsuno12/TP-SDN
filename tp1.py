@@ -24,12 +24,14 @@ def PPV(X,Y):
         Les predictions
 
     """
-    Ypred = []
-    for i, e in enumerate(X):                                                   #(i :indice de l'élément e, i et e parcourent X)
-        L = metrics.pairwise.euclidean_distances(X, e[np.newaxis])              #Les distances euclidiennes de tous les éléments de X avec e
-        L = np.delete(L, i)                                                     #On enlève la distance de l'élément de X d'indice i (c'est donc e) à e : elle est toujours égale à 0, si on ne l'enlevait pas ce serait la diagonale de la matrice donnée par la fonction. Dans l'autre algorithme, cette valeur n'est pas éliminée et c'est ce qui fait qu'il est "moins bon". 
-        Ypred.append(Y[np.argmin(L)])                                           #On ajoute à Ypred l'indice de la distance minimale de tous les éléments de X avec e. Grâce à la ligne précédente, ce n'est pas i !! Donc le plus proche voisin sélectionné pour e n'est pas e lui-même.
-    return np.array(Ypred)
+  
+    Ychapeau=[]
+    for i, e in enumerate(X):                                      #(i :indice de l'élément e, i et e parcourent X)
+        L=metrics.pairwise.euclidean_distances(X,e[np.newaxis])    #Les distances euclidiennes de tous les éléments de X avec e 
+        L=L.reshape(1,-1)                                          #pour que soit l matrice ligne 
+        L2=np.argsort(L)                                            #s est une matrice ligne qui donne les indice des valeur le l ordonnee cad la premier element de s est correspond a lindice de 0 dans l donc la premeir element de s est i
+        Ychapeau.append(Y[L2[0,1]])
+    return Ychapeau
 
 
 # 2)
@@ -65,10 +67,8 @@ def PPV3(Ychapeau,Y) :
     """
     s = 0
     for i in range(0, len(Y)):
-        if Ychapeau[i] == Y[i]:
-            s += 0
-        else:
-            s += 1
+        if Ychapeau[i] != Y[i]:
+            s=s+1
     return s*100 / len(Y)
 
 
@@ -93,14 +93,13 @@ print(Erreur(Ychapeau, Y))
 print(ErreurPPV(X, Y))
 # En revanche, dans notre algorithme, nous avons supprimé la possibilité
 # de prendre comme PPV d'une donnée la donnée elle-même
-# (en supprimant la diagonale de la matrice des distances).
 
 neigh2 = KNeighborsClassifier(n_neighbors=2)
 neigh2.fit(X, Y)
 Ychapeau2 = neigh2.predict(X)
 print(Ychapeau2)
-
 print(Erreur(Ychapeau2, Y))
+
 neigh3 = KNeighborsClassifier(n_neighbors=3)
 neigh3.fit(X, Y)
 Ychapeau3 = neigh3.predict(X)
@@ -128,15 +127,15 @@ def PPV_mod(k, X, Y):
     numpy.array
         Les predictions
     """
-    Ypred = []
+    Ychapeau = []
     for i, e in enumerate(X):
         L = metrics.pairwise.euclidean_distances(X, e[np.newaxis])
         L = L.reshape(Y.size)
         L2 = np.argsort(L)
         G = [L2[j] for j in range(1, k+1)]                              #range commence à un car on veut exclure le premier indice qui correspond la distance 0 (donc à e). 
         M = list(Y[G])                                                  #On le transforme en liste, c'est plus simple pour la ligne suivante. 
-        Ypred.append(max(M, key=M.count))                               #M.count comptabilise l'apparition d'une valeur (ici, la valeur correspond à une classe) dans M. On prend le max de M.count, donc en gros ça nous renvoie la valeur apparaissant le plus souvent dans M, c'est-à-dire la classe majoritaire dans M. 
-    return np.array(Ypred)
+        Ychapeau.append(max(M, key=M.count))                               #M.count comptabilise l'apparition d'une valeur (ici, la valeur correspond à une classe) dans M. On prend le max de M.count, donc en gros ça nous renvoie la valeur apparaissant le plus souvent dans M, c'est-à-dire la classe majoritaire dans M. 
+    return np.array(Ychapeau)
 
 # Classifieur Bayesien Naïf
 
