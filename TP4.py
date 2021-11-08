@@ -99,3 +99,51 @@ proj.info()
 C = proj['étudiant·e'] 
 M = proj.values[:, 1:] #Ici, c'est toutes les lignes et toutes les colonnes sauf la première
 print(M)
+
+"2"
+#Affinity propagation
+af = AffinityPropagation(preference=3).fit(M)
+cluster_centers_indices1 = af.cluster_centers_indices_
+plt.title("Representation des données avec AffinityPropagation")
+plt.scatter(M[:,0],M[:,1],c=af.labels_)
+plt.show()
+
+#Mean-shift
+bandwidth = estimate_bandwidth(M, quantile=0.2)
+ms = MeanShift(bandwidth=3, bin_seeding=True)
+ms.fit(M)
+cluster_centers2 = ms.cluster_centers_
+plt.title("Representation des données avec Meanshift")
+plt.scatter(M[:,0],M[:,1],c = ms.labels_)
+plt.show()
+
+#Spectral clustering
+sc = SpectralClustering(n_clusters = 3)
+sc.fit(M)
+plt.title("Representation des données avec Special Clustering")
+plt.scatter(M[:,0],M[:,1],c = sc.labels_)
+plt.show()
+
+#Birch
+B = Birch(n_clusters = 3)
+B.fit(M)
+plt.title("Representation des données avec Birch")
+plt.scatter(M[:,0],M[:,1],c = B.labels_)
+plt.show()
+
+
+#DBSCAN
+db = DBSCAN(eps=0.078)
+db.fit(M)
+plt.title("Representation des données avec DBSCAN")
+plt.scatter(M[:,0],M[:,1],c = db.labels_)
+plt.show()
+
+
+#Gaussian mixtures
+G = GaussianMixture(n_components=3, covariance_type='full')
+y_pred = G.fit_predict(M)
+plt.title("Representation des données avec Gaussian mixtures")
+plt.scatter(M[:,0],M[:,1],c = y_pred)
+plt.show()
+
