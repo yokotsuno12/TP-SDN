@@ -5,6 +5,7 @@ from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis # LDA
+import pandas as pd
 
 iris = datasets.load_iris()
 X = iris.data
@@ -73,3 +74,14 @@ IrisLDA=lda.fit(iris.data,iris.target).transform(iris.data)
 plt.figure(figsize=(4, 3))
 plt.scatter(IrisLDA[:, 0], IrisLDA[:, 1],c=iris.target)
 plt.title("Iris LDA")
+
+
+
+"PARTIE B"
+
+"1"
+proj = pd.read_csv('choixprojetstab.csv', sep = ' ')
+print(proj)
+proj.info()
+
+
