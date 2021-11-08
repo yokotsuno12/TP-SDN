@@ -4,6 +4,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis # LDA
 import pandas as pd
 
@@ -59,6 +60,18 @@ plt.show()
 #Rapport
 
 "3"
+
+score={}
+for k in range(2,10):
+    for i in range(10):
+        km=KMeans(n_clusters=k,init='k-means++', n_init=10,  random_state=10).fit(X)
+        score[k]=silhouette_score(X,km.labels_)
+plt.figure(figsize=(8,8))
+plt.plot(list(score.keys()),list(score.values()))
+plt.xlabel("number of cluster")
+plt.ylabel("silhouette score")
+plt.show()
+        
 
 "4"
 pca = PCA(n_components=2)
