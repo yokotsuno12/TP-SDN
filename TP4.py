@@ -97,10 +97,6 @@ proj = pd.read_csv('choixprojetstab.csv', sep = ';')
 print(proj)
 proj.info()
 C = proj['étudiant·e'] 
-proj2 = proj.drop(columns = 'C')
-M = proj2.drop(0) 
-
-
-
-
-
+#proj2 = proj.drop(C)
+M = proj.values[:, 1:]
+print(M)
