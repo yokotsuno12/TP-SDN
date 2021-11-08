@@ -97,6 +97,5 @@ proj = pd.read_csv('choixprojetstab.csv', sep = ';')
 print(proj)
 proj.info()
 C = proj['étudiant·e'] 
-#proj2 = proj.drop(C)
-M = proj.values[:, 1:]
+M = proj.values[:, 1:] #Ici, c'est toutes les lignes et toutes les colonnes sauf la première
 print(M)
