@@ -1,0 +1,6 @@
+import numpy as np
+
+"Partie A: K-Moyenne"
+print("Partie A\n")
+
+"1"
