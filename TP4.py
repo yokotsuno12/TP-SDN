@@ -80,8 +80,15 @@ plt.title("Iris LDA")
 "PARTIE B"
 
 "1"
-proj = pd.read_csv('choixprojetstab.csv', sep = ' ')
+proj = pd.read_csv('choixprojetstab.csv', sep = ';')
 print(proj)
 proj.info()
+C = proj['étudiant·e'] 
+proj2 = proj.drop(C)
+L1_proj2 = proj2[0]
+M = proj2.drop(L1_proj2) 
+
+
+
 
 
