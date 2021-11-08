@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
-
+from sklearn.cluster import KMeans
 
 iris = datasets.load_iris()
 X = iris.data
@@ -11,6 +11,17 @@ Y = iris.target
 
 "Partie A: K-Moyenne"
 print("Partie A\n")
+
+"1"
+#Fonction kmeans
+def baricentre(X, Y):                                                   
+    b_s = []
+    for k in np.unique(Y):
+        A = X[np.where(Y == k)]
+        b_s.append(np.mean(A, axis=0))
+    return np.array(b_s)
+
+
 def kmoyenne(data, k):
     bar_i = np.random.randint(0, len(data), k)
     ls_bar = data[bar_i]
@@ -23,11 +34,27 @@ def kmoyenne(data, k):
             return prediction
         last_pred = np.copy(prediction)
         ls_bar = baricentre(data, prediction)
-
-"1"
+        
+        
+#Test sur Iris avec notre fonction
 prediction = kmoyenne(X, 3)
 pca = PCA(n_components=2)
 X = pca.fit_transform(X)
 plt.title("Representation des données, reduction de dimension avec PCA")
 plt.scatter(X[:, 0], X[:, 1], c=prediction)
+plt.scatter(baricentre(X,prediction)[:,0],baricentre(X,prediction)[:,1],c='red')
 plt.show()
+
+# #Test sur Iris avec kmeans sklearn
+kmeans=KMeans(n_clusters=3).fit(X)
+centroid=kmeans.cluster_centers_
+plt.title("Representation des données avec Kmeans")
+plt.scatter(X[:,0],X[:,1],c=kmeans.labels_)
+plt.scatter(centroid[:,0],centroid[:,1],c='red')
+plt.show()
+
+"2"
+#Rapport
+
+"3"
+
