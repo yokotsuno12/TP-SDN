@@ -90,6 +90,8 @@ plt.title("Iris LDA")
 
 
 
+
+
 "PARTIE B"
 
 "1"
@@ -97,8 +99,11 @@ proj = pd.read_csv('choixprojetstab.csv', sep = ';')
 print(proj)
 proj.info()
 C = proj['étudiant·e'] 
-M = proj.values[:, 1:] #Ici, c'est toutes les lignes et toutes les colonnes sauf la première
+M = proj.values[:, 1:]          #Ici, c'est toutes les lignes et toutes les colonnes sauf la première
 print(M)
+proj.dtypes                     #Attribut de pandas :) Différence fonction / attribut : pas de parenthèse avec un attribut. 
+for i in range(1,len(M)), 
+    print(proj.dtypes[i]==1)    #on veut juste vérifier que les valeurs dans M soient bien numériques. Ici, on a pas besoin de les changer avec astype. 
 
 "2"
 #Affinity propagation
