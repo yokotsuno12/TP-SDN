@@ -4,6 +4,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis # LDA
 
 iris = datasets.load_iris()
 X = iris.data
@@ -38,9 +39,7 @@ def kmoyenne(data, k):
         
 #Test sur Iris avec notre fonction
 prediction = kmoyenne(X, 3)
-pca = PCA(n_components=2)
-X = pca.fit_transform(X)
-plt.title("Representation des données, reduction de dimension avec PCA")
+plt.title("Representation des données, reduction de dimension avec kmoyenne")
 plt.scatter(X[:, 0], X[:, 1], c=prediction)
 plt.scatter(baricentre(X,prediction)[:,0],baricentre(X,prediction)[:,1],c='red')
 plt.show()
@@ -50,6 +49,8 @@ kmeans=KMeans(n_clusters=3).fit(X)
 centroid=kmeans.cluster_centers_
 plt.title("Representation des données avec Kmeans")
 plt.scatter(X[:,0],X[:,1],c=kmeans.labels_)
+
+
 plt.scatter(centroid[:,0],centroid[:,1],c='red')
 plt.show()
 
@@ -58,3 +59,17 @@ plt.show()
 
 "3"
 
+"4"
+pca = PCA(n_components=2)
+X = pca.fit_transform(X)
+
+plt.figure(figsize=(4, 3))
+plt.scatter(X[:, 0], X[:, 1],c=Y)
+plt.title("Iris PCA")
+
+lda = LinearDiscriminantAnalysis(n_components=2)
+IrisLDA=lda.fit(iris.data,iris.target).transform(iris.data)
+
+plt.figure(figsize=(4, 3))
+plt.scatter(IrisLDA[:, 0], IrisLDA[:, 1],c=iris.target)
+plt.title("Iris LDA")
