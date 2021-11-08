@@ -131,7 +131,7 @@ def PPV_mod(k, X, Y):
     for i, e in enumerate(X):
         L = metrics.pairwise.euclidean_distances(X, e[np.newaxis])
         L = L.reshape(Y.size)
-        L2 = np.argsort(L)
+        L2 = np.argsort(L)                                              #np.argsort nous donne les index des distances euclidiennes en commençant par la plus petite valeur et en terminant par la plus grande. 
         G = [L2[j] for j in range(1, k+1)]                              #range commence à un car on veut exclure le premier indice qui correspond la distance 0 (donc à e). 
         M = list(Y[G])                                                  #On le transforme en liste, c'est plus simple pour la ligne suivante. 
         Ychapeau.append(max(M, key=M.count))                               #M.count comptabilise l'apparition d'une valeur (ici, la valeur correspond à une classe) dans M. On prend le max de M.count, donc en gros ça nous renvoie la valeur apparaissant le plus souvent dans M, c'est-à-dire la classe majoritaire dans M. 
