@@ -19,8 +19,9 @@ def Eprime(x):
 epsilon = 0.01
 nb_max = 1000
 
-def DG(A, x_0, nu): 
+def DG_E(x_0, nu): 
     L = []
+    L.append(x_0)
     for i in range(nb_max) :
         a = L[-1]-nu*Eprime(L[-1])
         L.append(a)
@@ -29,5 +30,12 @@ def DG(A, x_0, nu):
         else :
             pass
     return L
+
+plt.plot(DG_E(5, 0.001))
+plt.plot(DG_E(5, 0.01))
+plt.plot(DG_E(5, 0.1))
+plt.plot(DG_E(5, 0.17))
+plt.plot(DG_E(5, 1))
+plt.plot(DG_E(0, 0.001))
 
 
