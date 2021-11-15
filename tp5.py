@@ -25,17 +25,19 @@ def DG_E(x_0, nu):
     for i in range(nb_max) :
         a = L[-1]-nu*Eprime(L[-1])
         L.append(a)
-        if epsilon > L[-1]-L[-2] :
+        if epsilon > abs(L[-1]-L[-2]) :
             return L
         else :
             pass
     return L
 
-plt.plot(DG_E(5, 0.001))
-plt.plot(DG_E(5, 0.01))
-plt.plot(DG_E(5, 0.1))
-plt.plot(DG_E(5, 0.17))
-plt.plot(DG_E(5, 1))
-plt.plot(DG_E(0, 0.001))
+plt.plot(list(range(len(DG_E(5, 0.001)))), DG_E(5, 0.001), color= 'blue')
+plt.plot(list(range(len(DG_E(5, 0.01)))), DG_E(5, 0.01), color='green' )
 
+plt.plot(list(range(len(DG_E(5, 0.1)))), DG_E(5, 0.1), color='yellow' )
 
+plt.plot(list(range(len(DG_E(5, 0.17)))), DG_E(5, 0.17) , color='orange')
+
+plt.plot(list(range(len(DG_E(5, 1)))), DG_E(5, 1), color='red' )
+
+plt.plot(list(range(len(DG_E(0, 0.001)))), DG_E(0, 0.001), color='purple' )
