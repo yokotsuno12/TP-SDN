@@ -14,7 +14,7 @@ $E'(x)=4x^3-33x^2 +82x+61$
 def E(x):
     return (x-1)*(x-2)*(x-3)*(x-5)
 def Eprime(x):
-    return 4*x**3-33*x**2 +82*x+61
+    return 4*x**3-33*x**2 +82*x-61
 
 epsilon = 0.01
 nb_max = 1000
