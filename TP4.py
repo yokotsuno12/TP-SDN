@@ -3,19 +3,20 @@ import numpy as np
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
-from sklearn.cluster import KMeans
+from sklearn.cluster import *
+from sklearn.mixture import GaussianMixture
 from sklearn.metrics import silhouette_score
-from sklearn.discriminant_analysis import LinearDiscriminantAnalysis # LDA
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
 import pandas as pd
 
 iris = datasets.load_iris()
 X = iris.data
 Y = iris.target
 
-"Partie A: K-Moyenne"
+# Partie A: K-Moyenne
 print("Partie A\n")
 
-"1"
+# 1
 #Fonction kmeans
 def baricentre(X, Y):                                                   
     b_s = []
@@ -81,20 +82,21 @@ plt.figure(figsize=(4, 3))
 plt.scatter(X[:, 0], X[:, 1],c=Y)
 plt.title("Iris PCA")
 
-lda = LinearDiscriminantAnalysis(n_components=2)
+lda = LDA(n_components=2)
 IrisLDA=lda.fit(iris.data,iris.target).transform(iris.data)
 
 plt.figure(figsize=(4, 3))
 plt.scatter(IrisLDA[:, 0], IrisLDA[:, 1],c=iris.target)
 plt.title("Iris LDA")
+plt.show()
 
 
 
 
 
-"PARTIE B"
+# PARTIE B
 
-"1"
+# 1
 proj = pd.read_csv('choixprojetstab.csv', sep = ';')
 print(proj)
 proj.info()
@@ -102,53 +104,111 @@ C = proj['étudiant·e']
 M = proj.values[:, 1:]          #Ici, c'est toutes les lignes et toutes les colonnes sauf la première
 print(M)
 proj.dtypes                     #Attribut de pandas :) Différence fonction / attribut : pas de parenthèse avec un attribut. 
-for i in range(1,len(M)), 
-    print(proj.dtypes[i]==1)    #on veut juste vérifier que les valeurs dans M soient bien numériques. Ici, on a pas besoin de les changer avec astype. 
+for i in range(1,len(M)):
+    print(proj.dtypes[i])    #on veut juste vérifier que les valeurs dans M soient bien numériques. Ici, on a pas besoin de les changer avec astype. 
 
-"2"
-#Affinity propagation
-af = AffinityPropagation(preference=3).fit(M)
-cluster_centers_indices1 = af.cluster_centers_indices_
-plt.title("Representation des données avec AffinityPropagation")
-plt.scatter(M[:,0],M[:,1],c=af.labels_)
+# 2
+
+pca = PCA(n_components=2)
+M_pca = pca.fit_transform(M)
+plt.title("Representation des données")
+plt.scatter(M_pca[:,0],M_pca[:,1])
 plt.show()
 
-#Mean-shift
-bandwidth = estimate_bandwidth(M, quantile=0.2)
-ms = MeanShift(bandwidth=3, bin_seeding=True)
-ms.fit(M)
-cluster_centers2 = ms.cluster_centers_
-plt.title("Representation des données avec Meanshift")
-plt.scatter(M[:,0],M[:,1],c = ms.labels_)
+models = {
+     "AffinityPropagation" : AffinityPropagation(),
+     "Meanshift"           : MeanShift(bandwidth=3, bin_seeding=True),
+     "SpectralClustering"  : SpectralClustering(n_clusters=3),
+     "Birch"               : Birch(n_clusters=3),
+     "OPTICS"              : OPTICS(min_samples=5),
+     "GaussianMixture"     : GaussianMixture(n_components=3, covariance_type='full')
+    }
+
+silhouettes = []
+silhouettes_pca = []
+names = []
+
+for name, model in models.items():
+    label = model.fit_predict(M)
+    label_PCA = model.fit_predict(M_pca)
+
+    plt.figure()
+    
+    plt.subplot(1, 2, 1)
+    plt.scatter(M_pca[:, 0], M_pca[:, 1], c=label)
+    plt.title("données originales")
+    
+    plt.subplot(1, 2, 2)
+    plt.scatter(M_pca[:, 0], M_pca[:, 1], c=label_PCA)
+    plt.title("données après PCA")
+    
+    plt.suptitle("Clustering avec " + name)
+    plt.show()
+    
+    silhouettes.append(silhouette_score(M, label))
+    silhouettes_pca.append(silhouette_score(M, label_PCA))
+    names.append(name)
+
+bar_width = 0.3
+x = np.arange(len(names))
+fig, ax = plt.subplots(figsize=(12, 8))
+ax.barh(x,             silhouettes,     bar_width, label="NO PCA")
+ax.barh(x + bar_width, silhouettes_pca, bar_width, label="PCA")
+ax.set_yticks(x + bar_width / 2)
+ax.set_yticklabels(names)
+ax.legend()
+plt.title("indices de silhouette")
 plt.show()
 
-#Spectral clustering
-sc = SpectralClustering(n_clusters = 3)
-sc.fit(M)
-plt.title("Representation des données avec Special Clustering")
-plt.scatter(M[:,0],M[:,1],c = sc.labels_)
-plt.show()
-
-#Birch
-B = Birch(n_clusters = 3)
-B.fit(M)
-plt.title("Representation des données avec Birch")
-plt.scatter(M[:,0],M[:,1],c = B.labels_)
-plt.show()
 
 
-#DBSCAN
-db = DBSCAN(eps=0.078)
-db.fit(M)
-plt.title("Representation des données avec DBSCAN")
-plt.scatter(M[:,0],M[:,1],c = db.labels_)
-plt.show()
+# #Affinity propagation)
+# af = AffinityPropagation()
+# label = af.fit_predict(M)
+# print(np.unique(label))
+# plt.title("Representation des données avec AffinityPropagation")
+# lda = LDA(n_components=2)
+# M_lda = lda.fit(M, label).transform(M)
+# plt.scatter(M_red[:, 0], M_red[:, 1], c=label)
+# plt.show()
+# plt.scatter(M_lda[:, 0], M_lda[:, 1], c=label)
+# plt.show()
+
+# #Mean-shift
+# bandwidth = estimate_bandwidth(M, quantile=0.2)
+# ms = MeanShift(bandwidth=3, bin_seeding=True)
+# label = ms.fit_predict(M)
+# plt.title("Representation des données avec Meanshift")
+# plt.scatter(M_red[:,0], M_red[:,1], c = label)
+# plt.show()
+
+# #Spectral clustering
+# sc = SpectralClustering(n_clusters = 3)
+# label = sc.fit_predict(M)
+# plt.title("Representation des données avec Special Clustering")
+# plt.scatter(M_red[:,0],M_red[:,1],c = label)
+# plt.show()
+
+# #Birch
+# B = Birch(n_clusters = 3)
+# label = B.fit_predict(M)
+# plt.title("Representation des données avec Birch")
+# plt.scatter(M_red[:,0],M_red[:,1],c = label)
+# plt.show()
 
 
-#Gaussian mixtures
-G = GaussianMixture(n_components=3, covariance_type='full')
-y_pred = G.fit_predict(M)
-plt.title("Representation des données avec Gaussian mixtures")
-plt.scatter(M[:,0],M[:,1],c = y_pred)
-plt.show()
+# #DBSCAN
+# db = DBSCAN(eps=0.078)
+# label = db.fit_predict(M)
+# plt.title("Representation des données avec DBSCAN")
+# plt.scatter(M_red[:,0],M_red[:,1],c = label)
+# plt.show()
+
+
+# #Gaussian mixtures
+# G = GaussianMixture(n_components=3, covariance_type='full')
+# label = G.fit_predict(M)
+# plt.title("Representation des données avec Gaussian mixtures")
+# plt.scatter(M_red[:,0],M_red[:,1],c = label)
+# plt.show()
 
