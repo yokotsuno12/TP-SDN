@@ -8,6 +8,7 @@ from sklearn.mixture import GaussianMixture
 from sklearn.metrics import silhouette_score
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
 import pandas as pd
+from collections import defaultdict
 
 iris = datasets.load_iris()
 X = iris.data
@@ -67,10 +68,13 @@ plt.show()
 
 score = {}
 for k in range(2, 10):
+    ls = []
     for i in range(10):
         km = KMeans(n_clusters=k, init='k-means++',
                     n_init=10,  random_state=10).fit(X)
-        score[k] = silhouette_score(X, km.labels_)
+        ls.append(silhouette_score(X, km.labels_))
+    score[k] = np.mean(ls)
+
 plt.figure(figsize=(8, 8))
 plt.plot(list(score.keys()), list(score.values()))
 plt.xlabel("number of cluster")
