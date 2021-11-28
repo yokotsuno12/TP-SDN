@@ -109,28 +109,43 @@ for i in range(1,len(M)):
 
 # 2
 
-pca = PCA(n_components=2)
+pca = PCA(n_components=26)
 M_pca = pca.fit_transform(M)
 plt.title("Representation des données")
 plt.scatter(M_pca[:,0],M_pca[:,1])
 plt.show()
 
+pca = PCA().fit(M)
+fig, ax = plt.subplots(figsize=(12, 8))
+ax.plot(np.cumsum(pca.explained_variance_ratio_))
+
+x=np.where(np.cumsum(pca.explained_variance_ratio_) > 0.95)[0][0]
+xy = (x, np.cumsum(pca.explained_variance_ratio_)[x])
+ax.annotate('(%s, %s)' % xy, xy=xy, textcoords='data')
+ax.scatter(*xy, marker="X", color="red")
+
+plt.xlabel('number of components')
+plt.ylabel('cumulative explained variance')
+plt.show()
+
 models = {
-     "AffinityPropagation" : AffinityPropagation(),
-     "Meanshift"           : MeanShift(bandwidth=3, bin_seeding=True),
+     "AffinityPropagation" : AffinityPropagation(random_state=42, damping=0.5),
+     "Meanshift"           : MeanShift(bandwidth=4, bin_seeding=False),
      "SpectralClustering"  : SpectralClustering(n_clusters=3),
-     "Birch"               : Birch(n_clusters=3),
+     "Birch"               : Birch(n_clusters=4),
      "OPTICS"              : OPTICS(min_samples=5),
      "GaussianMixture"     : GaussianMixture(n_components=3, covariance_type='full')
     }
 
 silhouettes = []
-silhouettes_pca = []
+silhouettes_pca26 = []
+silhouettes_pca2 = []
 names = []
 
 for name, model in models.items():
     label = model.fit_predict(M)
-    label_PCA = model.fit_predict(M_pca)
+    label_PCA26 = model.fit_predict(M_pca)
+    label_PCA2 = model.fit_predict(M_pca[:, 0:2])
 
     plt.figure()
     
@@ -139,21 +154,23 @@ for name, model in models.items():
     plt.title("données originales")
     
     plt.subplot(1, 2, 2)
-    plt.scatter(M_pca[:, 0], M_pca[:, 1], c=label_PCA)
-    plt.title("données après PCA")
+    plt.scatter(M_pca[:, 0], M_pca[:, 1], c=label_PCA2)
+    plt.title("données après PCA (n=2)")
     
     plt.suptitle("Clustering avec " + name)
     plt.show()
     
     silhouettes.append(silhouette_score(M, label))
-    silhouettes_pca.append(silhouette_score(M, label_PCA))
+    silhouettes_pca26.append(silhouette_score(M, label_PCA26))
+    silhouettes_pca2.append(silhouette_score(M, label_PCA2))
     names.append(name)
 
-bar_width = 0.3
+bar_width = 0.25
 x = np.arange(len(names))
 fig, ax = plt.subplots(figsize=(12, 8))
-ax.barh(x,             silhouettes,     bar_width, label="NO PCA")
-ax.barh(x + bar_width, silhouettes_pca, bar_width, label="PCA")
+ax.barh(x,               silhouettes,       bar_width, label="NO PCA")
+ax.barh(x + bar_width,   silhouettes_pca2 , bar_width, label="PCA n=2")
+ax.barh(x + bar_width*2, silhouettes_pca26, bar_width, label="PCA n=26")
 ax.set_yticks(x + bar_width / 2)
 ax.set_yticklabels(names)
 ax.legend()
