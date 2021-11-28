@@ -1,14 +1,18 @@
-from sklearn import metrics, datasets
+from sklearn import datasets
 import numpy as np
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
-from sklearn.cluster import *
+from sklearn.cluster import (KMeans,
+                             AffinityPropagation,
+                             MeanShift,
+                             SpectralClustering,
+                             Birch,
+                             OPTICS)
 from sklearn.mixture import GaussianMixture
 from sklearn.metrics import silhouette_score
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
 import pandas as pd
-from collections import defaultdict
 
 iris = datasets.load_iris()
 X = iris.data
@@ -22,6 +26,22 @@ print("Partie A\n")
 
 
 def baricentre(X, Y):
+    """
+    Fonction qui calcule les centroids des points en fonction de leurs classes.
+
+    Parameters
+    ----------
+    X : array-like of shape (n_samples, n_features)
+        Les données
+    Y : array, shape (n_samples,)
+        Les labels
+
+    Returns
+    -------
+    numpy.ndarray
+        Les centroids pour chaque classe
+
+    """
     b_s = []
     for k in np.unique(Y):
         A = X[np.where(Y == k)]
@@ -30,6 +50,22 @@ def baricentre(X, Y):
 
 
 def kmoyenne(data, k):
+    """
+    Implémentation de l'algorithme kmeans.
+
+    Parameters
+    ----------
+    data : array-like of shape (n_samples, n_features)
+        Les données
+    k : int
+        Nombre de cluster
+
+    Returns
+    -------
+    prediction : numpy.ndarray
+        Les labels predit
+
+    """
     bar_i = np.random.randint(0, len(data), k)
     ls_bar = data[bar_i]
     last_pred = np.zeros(len(data))
@@ -41,6 +77,7 @@ def kmoyenne(data, k):
             return prediction
         last_pred = np.copy(prediction)
         ls_bar = baricentre(data, prediction)
+    return prediction
 
 
 # Test sur Iris avec notre fonction
@@ -61,10 +98,10 @@ plt.scatter(X[:, 0], X[:, 1], c=kmeans.labels_)
 plt.scatter(centroid[:, 0], centroid[:, 1], c='red')
 plt.show()
 
-"2"
+# 2
 # Rapport
 
-"3"
+# 3
 
 score = {}
 for k in range(2, 10):
@@ -82,7 +119,7 @@ plt.ylabel("silhouette score")
 plt.show()
 
 
-"4"
+# 4
 pca = PCA(n_components=2)
 X = pca.fit_transform(X)
 
@@ -109,10 +146,12 @@ C = proj['étudiant·e']
 # Ici, c'est toutes les lignes et toutes les colonnes sauf la première
 M = proj.values[:, 1:]
 print(M)
-# Attribut de pandas :) Différence fonction / attribut : pas de parenthèse avec un attribut.
+# Attribut de pandas :) Différence fonction / attribut : pas de parenthèse
+# avec un attribut.
 proj.dtypes
 for i in range(1, len(M)):
-    # on veut juste vérifier que les valeurs dans M soient bien numériques. Ici, on a pas besoin de les changer avec astype.
+    # on veut juste vérifier que les valeurs dans M soient bien numériques.
+    # Ici, on a pas besoin de les changer avec astype.
     print(proj.dtypes[i])
 
 # 2
@@ -197,9 +236,10 @@ bar1 = ax.barh(x,               silhouettes,       bar_width, label="NO PCA")
 bar2 = ax.barh(x + bar_width,   silhouettes_pca2,  bar_width, label="PCA n=2")
 bar3 = ax.barh(x + bar_width*2, silhouettes_pca26, bar_width, label="PCA n=26")
 
+
 def print_nb_cluster(bar, nb_cluster):
     for i, b in enumerate(bar):
-        
+
         width = b.get_width()
         x_coor = 0.01
         if width < 0:
@@ -207,9 +247,11 @@ def print_nb_cluster(bar, nb_cluster):
         else:
             x_coor *= -1
             alignement = "right"
-        ax.text(x_coor, b.get_y() + b.get_height()/4., 
-        str(nb_cluster[i]) + " clusters",
-        ha=alignement, va='bottom', rotation=0)
+        ax.text(x_coor,
+                b.get_y() + b.get_height()/4.,
+                str(nb_cluster[i]) + " clusters",
+                ha=alignement, va='bottom', rotation=0)
+
 
 print_nb_cluster(bar1, num_cluster)
 print_nb_cluster(bar2, num_cluster_pca2)
@@ -220,54 +262,3 @@ ax.set_yticklabels(names)
 ax.legend()
 plt.title("indices de silhouette")
 plt.show()
-
-
-# #Affinity propagation)
-# af = AffinityPropagation()
-# label = af.fit_predict(M)
-# print(np.unique(label))
-# plt.title("Representation des données avec AffinityPropagation")
-# lda = LDA(n_components=2)
-# M_lda = lda.fit(M, label).transform(M)
-# plt.scatter(M_red[:, 0], M_red[:, 1], c=label)
-# plt.show()
-# plt.scatter(M_lda[:, 0], M_lda[:, 1], c=label)
-# plt.show()
-
-# #Mean-shift
-# bandwidth = estimate_bandwidth(M, quantile=0.2)
-# ms = MeanShift(bandwidth=3, bin_seeding=True)
-# label = ms.fit_predict(M)
-# plt.title("Representation des données avec Meanshift")
-# plt.scatter(M_red[:,0], M_red[:,1], c = label)
-# plt.show()
-
-# #Spectral clustering
-# sc = SpectralClustering(n_clusters = 3)
-# label = sc.fit_predict(M)
-# plt.title("Representation des données avec Special Clustering")
-# plt.scatter(M_red[:,0],M_red[:,1],c = label)
-# plt.show()
-
-# #Birch
-# B = Birch(n_clusters = 3)
-# label = B.fit_predict(M)
-# plt.title("Representation des données avec Birch")
-# plt.scatter(M_red[:,0],M_red[:,1],c = label)
-# plt.show()
-
-
-# #DBSCAN
-# db = DBSCAN(eps=0.078)
-# label = db.fit_predict(M)
-# plt.title("Representation des données avec DBSCAN")
-# plt.scatter(M_red[:,0],M_red[:,1],c = label)
-# plt.show()
-
-
-# #Gaussian mixtures
-# G = GaussianMixture(n_components=3, covariance_type='full')
-# label = G.fit_predict(M)
-# plt.title("Representation des données avec Gaussian mixtures")
-# plt.scatter(M_red[:,0],M_red[:,1],c = label)
-# plt.show()
