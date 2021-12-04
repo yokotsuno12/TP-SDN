@@ -8,6 +8,9 @@
 
 import matplotlib.pyplot as plt
 import numpy as np
+from scipy.spatial import distance
+
+
 
 # 1.\\
 
@@ -214,3 +217,25 @@ plt.subplots_adjust(left=0.1,
 
 # DESCENTE DE GRADIENT POUR LA REGRESSION LINEAIRE
 
+
+def Ychapeau(X, a, b) : 
+    Ychap = []
+    for i in range(len(X)) :
+        Ychap.append(a*X[i]+b)
+    return Ychap
+
+def F(X, Y, a, b):
+    s = 0
+    for i in range(len(X)):
+        s+=(Ychapeau(X, a,b)[i]-Y[i])**2 #(ax_i -b - y_i)^2 = (ax_i)^2 -2*a*x_i(b+y_i) +(b+y_i)^2
+    return s
+def F_prim_a(X,Y,a,b) :
+    s = 0
+    for i in range(len(X)):
+        s+=2*(a*X[i]**2 - X[i]*(b+Y[i]))
+    return s
+def F_prim_b(X,Y,a,b) :
+    s = 0
+    for i in range(len(X)):
+        s+=2*(b*Y[i]**2-a*X[i])
+    return s
