@@ -141,7 +141,8 @@ plt.xlabel("epoch")
 plt.ylabel("x trouvé")
 plt.show()
 
-#### Maintenant, on va tester tous ça opur des valeurs différentes :
+
+#### Maintenant, on va tester tout ça pour des valeurs différentes :
 
 for nu in (10**-i for i in reversed(range(1, 4))):
     plt.figure()
@@ -153,7 +154,7 @@ for nu in (10**-i for i in reversed(range(1, 4))):
         plt.plot(list(range(len(DG_E(j, nu)))), DG_E(j, nu), color='red')
         plt.xlabel("epoch")
         plt.ylabel("x trouvé")
-        plt.title(j)
+        plt.title('DG_E(' + str(j) + ',' + str(nu) + ") / itérations :" + str(len(DG_E(j, nu))))
     plt.subplots_adjust(left=0.1,
                         bottom=0.1,
                         right=3.5,
