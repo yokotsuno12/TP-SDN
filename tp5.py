@@ -243,30 +243,26 @@ for nu in (10**-i for i in reversed(range(1, 4))):
 
 def Ychapeau(X, a, b) : 
     Ychap = []
-    for i in range(len(X)):
-        Ychap.append(a * X[i] + b)
+    for i in range(len(X)) :
+        Ychap.append(a*X[i]+b)
     return Ychap
-
 
 def F(X, Y, a, b):
     s = 0
     for i in range(len(X)):
-        # (ax_i -b - y_i)^2 = (ax_i)^2 -2*a*x_i(b+y_i) +(b+y_i)^2
-        s += (Ychapeau(X, a, b)[i] - Y[i])**2
+        s+=(Ychapeau(X, a,b)[i]-Y[i])**2 #(ax_i -b - y_i)^2 = (ax_i)^2 -2*a*x_i(b+y_i) +(b+y_i)^2
     return s
-
 
 def F_prim_a(X,Y,a,b) :
     s = 0
     for i in range(len(X)):
-        s += 2 * (a * X[i]**2 - X[i] * (b + Y[i]))
+        s+=2*(a*X[i]**2 - X[i]*(b+Y[i]))
     return s
-
 
 def F_prim_b(X,Y,a,b) :
     s = 0
     for i in range(len(X)):
-        s += 2 * (b * Y[i]**2 - a * X[i])
+        s+=2*(b + Y[i] - a*X[i])
     return s
 
 
