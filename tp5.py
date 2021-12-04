@@ -218,6 +218,8 @@ plt.subplots_adjust(left=0.1,
 # DESCENTE DE GRADIENT POUR LA REGRESSION LINEAIRE
 
 
+## Descente de gradient pour la régression linéaire
+
 def Ychapeau(X, a, b) : 
     Ychap = []
     for i in range(len(X)) :
@@ -239,3 +241,21 @@ def F_prim_b(X,Y,a,b) :
     for i in range(len(X)):
         s+=2*(b*Y[i]**2-a*X[i])
     return s
+
+def DG_F(X,Y,a_0, b_0, nu): 
+    A = []
+    B = []
+    C = [(a_0,b_0)]
+    A.append(a_0)
+    B.append(b_0)
+    for i in range(1, nb_max+1) :
+        a = A[-1]-nu*F_prim_a(X, Y, A[-1], B[-1])
+        b = B[-1]-nu*F_prim_b(X, Y, A[-1], B[-1])
+        A.append(a)
+        B.append(b)
+        C.append((a,b))
+        if epsilon > distance.euclidean((A[-1], B[-1]), (A[-2], B[-2])) :
+            return C
+        else :
+            pass
+    return C
