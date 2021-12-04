@@ -100,6 +100,8 @@ plt.subplots_adjust(left=0.1,
                     top=1,  
                     wspace=0.4,  
                     hspace=0.4)
+for j in visualisation: 
+    print(len(j))
 
 plt.plot(list(range(len(DG_a))), DG_a, color='blue')
 plt.title("x0 = 5 et nu = 0.001")
@@ -134,7 +136,81 @@ plt.xlabel("epoch")
 plt.ylabel("x trouvé")
 plt.show()
 
+#### Maintenant, on va tester tous ça opur des valeurs différentes : 
 
+i=0
+plt.figure()
+plt.figsize = (20,20)
+for j in range(5) : 
+    i+=1
+    plt.subplot(1,6,i)
+    plt.scatter(list(range(len(DG_E(j,0.001)))), DG_E(j,0.001), color='blue')
+    plt.plot(list(range(len(DG_E(j,0.001)))), DG_E(j,0.001), color='red')
+    plt.xlabel("epoch")
+    plt.ylabel("x trouvé")
+    plt.title(j)
+plt.subplots_adjust(left=0.1, 
+                    bottom=0.1,  
+                    right=3.5,  
+                    top=1,  
+                    wspace=0.4,  
+                    hspace=0.4)
+
+i=0
+plt.figure()
+plt.figsize = (20,20)
+for j in range(5) : 
+    i+=1
+    plt.subplot(1,6,i)
+    plt.scatter(list(range(len(DG_E(j,0.01)))), DG_E(j,0.01), color='blue')
+    plt.plot(list(range(len(DG_E(j,0.01)))), DG_E(j,0.01), color='red')
+    plt.xlabel("epoch")
+    plt.ylabel("x trouvé")
+    plt.title(j)
+plt.subplots_adjust(left=0.1, 
+                    bottom=0.1,  
+                    right=3.5,  
+                    top=1,  
+                    wspace=0.4,  
+                    hspace=0.4)
+
+i=0
+plt.figure()
+plt.figsize = (20,20)
+for j in range(5) : 
+    i+=1
+    plt.subplot(1,6,i)
+    plt.scatter(list(range(len(DG_E(j,0.1)))), DG_E(j,0.1), color='blue')
+    plt.plot(list(range(len(DG_E(j,0.1)))), DG_E(j,0.1), color='red')
+    plt.xlabel("epoch")
+    plt.ylabel("x trouvé")
+    plt.title(j)
+plt.subplots_adjust(left=0.1, 
+                    bottom=0.1,  
+                    right=3.5,  
+                    top=1,  
+                    wspace=0.4,  
+                    hspace=0.4)
+
+i=0
+plt.figure()
+plt.figsize = (20,20)
+for j in range(5) : 
+    i+=1
+    plt.subplot(1,6,i)
+    plt.scatter(list(range(len(DG_E(j,0.1)))), DG_E(j,0.1), color='blue')
+    plt.plot(list(range(len(DG_E(j,0.1)))), DG_E(j,0.1), color='red')
+    plt.xlabel("epoch")
+    plt.ylabel("x trouvé")
+    plt.title(j)
+plt.subplots_adjust(left=0.1, 
+                    bottom=0.1,  
+                    right=3.5,  
+                    top=1,  
+                    wspace=0.4,  
+                    hspace=0.4)
+
+#### !! Attention aux échelles !! Il faut bien regarder 
 
 # DESCENTE DE GRADIENT POUR LA REGRESSION LINEAIRE
 
