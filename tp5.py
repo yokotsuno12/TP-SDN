@@ -11,9 +11,7 @@ import numpy as np
 from scipy.spatial import distance
 
 
-
 # 1.\\
-
 # $E(x)=(x-1)(x-2)(x-3)(x-5)\\
 # =(x^2-2x-x+2)(x^2-5x-3x+15)\\
 # =(x^2-3x+2)(x^2-8x+15)\\
@@ -47,7 +45,8 @@ def DG_E(x_0, nu):
             pass
     return L
 
-X = np.arange(0.5,5.3, 0.01)
+
+X = np.arange(0.5, 5.3, 0.01)
 min_locaux_X = []
 Y_Eprime = Eprime(X)
 
@@ -70,40 +69,42 @@ DG_a = DG_E(5, 0.001)
 DG_b = DG_E(5, 0.01)
 DG_c = DG_E(5, 0.1)
 DG_d = DG_E(5, 0.17)
-DG_e = DG_E(5, 1)
+#DG_e = DG_E(5, 1)
 DG_f = DG_E(0, 0.001)
-visualisation = [DG_a, DG_b, DG_c, DG_d, DG_e, DG_f]
+visualisation = [DG_a, DG_b, DG_c, DG_d, DG_f]
 
-#Autre manière pour les visualiser toutes d'un coup ;) 
-i=0
+# Autre manière pour les visualiser toutes d'un coup ;)
+i = 0
 plt.figure()
-plt.figsize = (20,20)
-for j in visualisation :
-    i+=1
-    plt.subplot(1,6,i)
+plt.figsize = (20, 20)
+for j in visualisation:
+    i += 1
+    plt.subplot(1, 6, i)
     plt.scatter(list(range(len(j))), j, color='blue')
     plt.plot(list(range(len(j))), j, color='red')
     plt.xlabel("epoch")
     plt.ylabel("x trouvé")
-    if visualisation.index(j)==0 :
+    if visualisation.index(j) == 0:
         plt.title('DG_E(5, 0.001)')
-    elif visualisation.index(j)==1 :
+    elif visualisation.index(j) == 1:
         plt.title('DG_E(5, 0.01)')
-    elif visualisation.index(j)==2 :
+    elif visualisation.index(j) == 2:
         plt.title('DG_E(5, 0.1)')
-    elif visualisation.index(j)==3 :
+    elif visualisation.index(j) == 3:
         plt.title('DG_E(5, 0.17)')
-    elif visualisation.index(j)==4 :
+    elif visualisation.index(j) == 4:
         plt.title('DG_E(5, 1)')
-    else :
+    else:
         plt.title('DG_E(0, 0.001)')
-plt.subplots_adjust(left=0.1, 
-                    bottom=0.1,  
-                    right=3.5,  
-                    top=1,  
-                    wspace=0.4,  
+
+plt.subplots_adjust(left=0.1,
+                    bottom=0.1,
+                    right=3.5,
+                    top=1,
+                    wspace=0.4,
                     hspace=0.4)
-for j in visualisation: 
+
+for j in visualisation:
     print(len(j))
 
 plt.plot(list(range(len(DG_a))), DG_a, color='blue')
@@ -139,79 +140,99 @@ plt.xlabel("epoch")
 plt.ylabel("x trouvé")
 plt.show()
 
-#### Maintenant, on va tester tous ça opur des valeurs différentes : 
+#### Maintenant, on va tester tous ça opur des valeurs différentes :
 
-i=0
-plt.figure()
-plt.figsize = (20,20)
-for j in range(5) : 
-    i+=1
-    plt.subplot(1,6,i)
-    plt.scatter(list(range(len(DG_E(j,0.001)))), DG_E(j,0.001), color='blue')
-    plt.plot(list(range(len(DG_E(j,0.001)))), DG_E(j,0.001), color='red')
-    plt.xlabel("epoch")
-    plt.ylabel("x trouvé")
-    plt.title(j)
-plt.subplots_adjust(left=0.1, 
-                    bottom=0.1,  
-                    right=3.5,  
-                    top=1,  
-                    wspace=0.4,  
-                    hspace=0.4)
 
-i=0
-plt.figure()
-plt.figsize = (20,20)
-for j in range(5) : 
-    i+=1
-    plt.subplot(1,6,i)
-    plt.scatter(list(range(len(DG_E(j,0.01)))), DG_E(j,0.01), color='blue')
-    plt.plot(list(range(len(DG_E(j,0.01)))), DG_E(j,0.01), color='red')
-    plt.xlabel("epoch")
-    plt.ylabel("x trouvé")
-    plt.title(j)
-plt.subplots_adjust(left=0.1, 
-                    bottom=0.1,  
-                    right=3.5,  
-                    top=1,  
-                    wspace=0.4,  
-                    hspace=0.4)
 
-i=0
-plt.figure()
-plt.figsize = (20,20)
-for j in range(5) : 
-    i+=1
-    plt.subplot(1,6,i)
-    plt.scatter(list(range(len(DG_E(j,0.1)))), DG_E(j,0.1), color='blue')
-    plt.plot(list(range(len(DG_E(j,0.1)))), DG_E(j,0.1), color='red')
-    plt.xlabel("epoch")
-    plt.ylabel("x trouvé")
-    plt.title(j)
-plt.subplots_adjust(left=0.1, 
-                    bottom=0.1,  
-                    right=3.5,  
-                    top=1,  
-                    wspace=0.4,  
-                    hspace=0.4)
+for nu in (10**-i for i in reversed(range(1, 4))):
+    plt.figure()
+    plt.figsize = (20, 20)
+    for j in range(5):
+        j += 1
+        plt.subplot(1, 6, j)
+        plt.scatter(list(range(len(DG_E(j, nu)))), DG_E(j, nu), color='blue')
+        plt.plot(list(range(len(DG_E(j, nu)))), DG_E(j, nu), color='red')
+        plt.xlabel("epoch")
+        plt.ylabel("x trouvé")
+        plt.title(j)
+    plt.subplots_adjust(left=0.1,
+                        bottom=0.1,
+                        right=3.5,
+                        top=1,
+                        wspace=0.4,
+                        hspace=0.4)
 
-i=0
-plt.figure()
-plt.figsize = (20,20)
-for j in range(5) : 
-    i+=1
-    plt.subplot(1,6,i)
-    plt.scatter(list(range(len(DG_E(j,0.1)))), DG_E(j,0.1), color='blue')
-    plt.plot(list(range(len(DG_E(j,0.1)))), DG_E(j,0.1), color='red')
-    plt.xlabel("epoch")
-    plt.ylabel("x trouvé")
-    plt.title(j)
-plt.subplots_adjust(left=0.1, 
-                    bottom=0.1,  
-                    right=3.5,  
-                    top=1,  
-                    wspace=0.4,  
-                    hspace=0.4)
+# i=0
+# plt.figure()
+# plt.figsize = (20, 20)
+# for j in range(5):
+#     i += 1
+#     plt.subplot(1, 6, i)
+#     plt.scatter(list(range(len(DG_E(j,0.001)))), DG_E(j,0.001), color='blue')
+#     plt.plot(list(range(len(DG_E(j,0.001)))), DG_E(j,0.001), color='red')
+#     plt.xlabel("epoch")
+#     plt.ylabel("x trouvé")
+#     plt.title(j)
+# plt.subplots_adjust(left=0.1, 
+#                     bottom=0.1,  
+#                     right=3.5,  
+#                     top=1,  
+#                     wspace=0.4,  
+#                     hspace=0.4)
+
+# i=0
+# plt.figure()
+# plt.figsize = (20, 20)
+# for j in range(5):
+#     i += 1
+#     plt.subplot(1, 6, i)
+#     plt.scatter(list(range(len(DG_E(j,0.01)))), DG_E(j,0.01), color='blue')
+#     plt.plot(list(range(len(DG_E(j,0.01)))), DG_E(j,0.01), color='red')
+#     plt.xlabel("epoch")
+#     plt.ylabel("x trouvé")
+#     plt.title(j)
+# plt.subplots_adjust(left=0.1, 
+#                     bottom=0.1,  
+#                     right=3.5,  
+#                     top=1,  
+#                     wspace=0.4,  
+#                     hspace=0.4)
+
+# i=0
+# plt.figure()
+# plt.figsize = (20,20)
+# for j in range(5) : 
+#     i+=1
+#     plt.subplot(1,6,i)
+#     plt.scatter(list(range(len(DG_E(j,0.1)))), DG_E(j,0.1), color='blue')
+#     plt.plot(list(range(len(DG_E(j,0.1)))), DG_E(j,0.1), color='red')
+#     plt.xlabel("epoch")
+#     plt.ylabel("x trouvé")
+#     plt.title(j)
+# plt.subplots_adjust(left=0.1, 
+#                     bottom=0.1,  
+#                     right=3.5,  
+#                     top=1,  
+#                     wspace=0.4,  
+#                     hspace=0.4)
+
+# i=0
+# plt.figure()
+# plt.figsize = (20,20)
+# for j in range(5) : 
+#     i+=1
+#     plt.subplot(1,6,i)
+#     plt.scatter(list(range(len(DG_E(j,0.1)))), DG_E(j,0.1), color='blue')
+#     plt.plot(list(range(len(DG_E(j,0.1)))), DG_E(j,0.1), color='red')
+#     plt.xlabel("epoch")
+#     plt.ylabel("x trouvé")
+#     plt.title(j)
+# plt.subplots_adjust(left=0.1, 
+#                     bottom=0.1,  
+#                     right=3.5,  
+#                     top=1,  
+#                     wspace=0.4,  
+#                     hspace=0.4)
 
 #### !! Attention aux échelles !! Il faut bien regarder 
 
