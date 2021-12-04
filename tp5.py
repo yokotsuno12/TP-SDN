@@ -9,6 +9,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.spatial import distance
+from scipy.stats import linregress
 from sklearn.datasets import make_regression
 
 
@@ -161,7 +162,7 @@ for nu in (10**-i for i in reversed(range(1, 4))):
                         top=1,
                         wspace=0.4,
                         hspace=0.4)
-
+plt.show()
 # i=0
 # plt.figure()
 # plt.figsize = (20, 20)
@@ -266,7 +267,7 @@ def F_prim_b(X,Y,a,b) :
     return s
 
 
-def DG_F(X,Y,a_0, b_0, nu): 
+def DG_F(X,Y,a_0, b_0, nu, nb_max = 100): 
     A = []
     B = []
     C = [(a_0, b_0)]
@@ -278,6 +279,9 @@ def DG_F(X,Y,a_0, b_0, nu):
         A.append(a)
         B.append(b)
         C.append((a, b))
+        # On sort de la fonction si la divergence est trop importante
+        if abs(a) > 10**20 or abs(b) > 10**20:
+            return np.array(C)
         if epsilon > distance.euclidean((A[-1], B[-1]), (A[-2], B[-2])):
             return np.array(C)
         else:
@@ -293,6 +297,7 @@ X, Y = make_regression(n_features=1)
 X = np.concatenate(X)
 noise = np.random.normal(0,np.var(Y)**0.3,len(X))
 Y_noise = Y+noise
+Y_noise += 5  # np.random.normal(0, 10, 1)[0]
 
 C = DG_F(X,Y_noise, 1, 100, 0.001)
 
@@ -308,7 +313,32 @@ C = DG_F(X,Y_noise, 1, 100, 0.001)
 # plt.plot(np.arange(len(C)), C[:,1], color='RED')
 # plt.show()
 
-AB = DG_F(X,Y, 1,1, 0.001)[-1]
-plt.figure()
-plt.scatter(X,Y_noise, color='blue')
-plt.plot([min(X), max(X)], [AB[0]*min(X)+ AB[1], AB[0]*max(X)+AB[1]] , color='red')
+for nu, epoch in ((0.001, 100),
+                  (0.001, 500),
+                  (0.001, 1000),
+                  (0.01, 1000),
+                  (1, 1000)):
+    plt.figure(figsize=(12, 8))
+    C = DG_F(X,Y_noise, 1,1, nu, epoch)
+    A, B = C[-1]
+    B *= -1  # Le signe de B est inversé (on sait pas pourquoi)
+    plt.title("nu = {}, epoch = {}".format(nu, len(C)))
+    plt.xlabel("fonction de regression : f(x) = {:0.3e}x + {:0.3e}".format(A, B))
+    plt.scatter(X, Y_noise, color='blue')
+    plt.plot([min(X), max(X)], [A*min(X) + B, A*max(X)+B], color='red')
+    plt.show()
+
+reg_scipy = linregress(X, Y_noise)
+A_scipy, B_scipy = reg_scipy.slope, reg_scipy.intercept
+A, B = DG_F(X, Y_noise, 1, 1, 0.001, 100)[-1]
+B *= -1  # Le signe de B est inversé (on sait pas pourquoi)
+print(A, B)
+print(A_scipy, B_scipy)
+
+plt.figure(figsize=(12, 8))
+plt.title("comparaison")
+plt.scatter(X, Y_noise, color='blue')
+plt.plot([min(X), max(X)], [A*min(X) + B, A*max(X)+B], color='red', label = "notre regression")
+plt.plot([min(X), max(X)], [A_scipy*min(X) + B_scipy, A_scipy*max(X)+B_scipy], color='green', label = "la regression de scipy")
+plt.legend()
+plt.show()
