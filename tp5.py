@@ -70,9 +70,9 @@ DG_a = DG_E(5, 0.001)
 DG_b = DG_E(5, 0.01)
 DG_c = DG_E(5, 0.1)
 DG_d = DG_E(5, 0.17)
-#DG_e = DG_E(5, 1)
+DG_e = DG_E(5, 1)
 DG_f = DG_E(0, 0.001)
-visualisation = [DG_a, DG_b, DG_c, DG_d, DG_f]
+visualisation = [DG_a, DG_b, DG_c, DG_d, DG_e, DG_f]
 
 #Autre manière pour les visualiser toutes d'un coup ;) 
 i=0
