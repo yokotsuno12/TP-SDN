@@ -9,6 +9,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.spatial import distance
+from sklearn.datasets import make_regression
 
 
 # 1.\\
@@ -241,48 +242,68 @@ for nu in (10**-i for i in reversed(range(1, 4))):
 
 def Ychapeau(X, a, b) : 
     Ychap = []
-    for i in range(len(X)) :
-        Ychap.append(a*X[i]+b)
+    for i in range(len(X)):
+        Ychap.append(a * X[i] + b)
     return Ychap
+
 
 def F(X, Y, a, b):
     s = 0
     for i in range(len(X)):
-        s+=(Ychapeau(X, a,b)[i]-Y[i])**2 #(ax_i -b - y_i)^2 = (ax_i)^2 -2*a*x_i(b+y_i) +(b+y_i)^2
+        # (ax_i -b - y_i)^2 = (ax_i)^2 -2*a*x_i(b+y_i) +(b+y_i)^2
+        s += (Ychapeau(X, a, b)[i] - Y[i])**2
     return s
+
+
 def F_prim_a(X,Y,a,b) :
     s = 0
     for i in range(len(X)):
-        s+=2*(a*X[i]**2 - X[i]*(b+Y[i]))
+        s += 2 * (a * X[i]**2 - X[i] * (b + Y[i]))
     return s
+
+
 def F_prim_b(X,Y,a,b) :
     s = 0
     for i in range(len(X)):
-        s+=2*(b*Y[i]**2-a*X[i])
+        s += 2 * (b * Y[i]**2 - a * X[i])
     return s
+
 
 def DG_F(X,Y,a_0, b_0, nu): 
     A = []
     B = []
-    C = [(a_0,b_0)]
+    C = [(a_0, b_0)]
     A.append(a_0)
     B.append(b_0)
-    for i in range(1, nb_max+1) :
-        a = A[-1]-nu*F_prim_a(X, Y, A[-1], B[-1])
-        b = B[-1]-nu*F_prim_b(X, Y, A[-1], B[-1])
+    for i in range(1, nb_max + 1):
+        a = A[-1] - nu * F_prim_a(X, Y, A[-1], B[-1])
+        b = B[-1] - nu * F_prim_b(X, Y, A[-1], B[-1])
         A.append(a)
         B.append(b)
-        C.append((a,b))
-        if epsilon > distance.euclidean((A[-1], B[-1]), (A[-2], B[-2])) :
+        C.append((a, b))
+        if epsilon > distance.euclidean((A[-1], B[-1]), (A[-2], B[-2])):
             return C
-        else :
+        else:
             pass
-    return C
+    return np.array(C)
 #### Note pour les autres : Ici on va rencontrer un problème : Dès qu'on va changer la valeur de nb_max (en 500 par ex), d'epsilon (en 0.1 par ex je crois) ou de nu, l'algorithme ne va pas marcher. Je ne comprends pas encore pourquoi (ici Pépita). Ca m'affiche "array must not contain infs or NaNs". :/ Pb avec la distance euclidienne, je crois. 
+
 
 nb_max = 100
 epsilon = 0.01
 
-plt.plot(list(range(len(DG_F(X, Y, 1,1, 0.001)))), DG_F(X,Y, 1,1, 0.001) , color='RED')
+X, Y = make_regression(n_features=1)
+X = np.concatenate(X)
+C = DG_F(X,Y, 1,1, 0.001)
 
-DG_F(X,Y, 1,1, 0.001)
+plt.figure()
+plt.title("evolution de a")
+plt.scatter(X, Y)
+plt.plot(np.arange(len(C)), C[:,0], color='RED')
+plt.show()
+
+plt.figure()
+plt.title("evolution de b")
+plt.scatter(X, Y)
+plt.plot(np.arange(len(C)), C[:,1], color='RED')
+plt.show()
