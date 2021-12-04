@@ -279,7 +279,7 @@ def DG_F(X,Y,a_0, b_0, nu):
         B.append(b)
         C.append((a, b))
         if epsilon > distance.euclidean((A[-1], B[-1]), (A[-2], B[-2])):
-            return C
+            return np.array(C)
         else:
             pass
     return np.array(C)
@@ -291,16 +291,24 @@ epsilon = 0.01
 
 X, Y = make_regression(n_features=1)
 X = np.concatenate(X)
-C = DG_F(X,Y, 1,1, 0.001)
+noise = np.random.normal(0,np.var(Y)**0.3,len(X))
+Y_noise = Y+noise
 
-plt.figure()
-plt.title("evolution de a")
-plt.scatter(X, Y)
-plt.plot(np.arange(len(C)), C[:,0], color='RED')
-plt.show()
+C = DG_F(X,Y_noise, 1, 100, 0.001)
 
+# plt.figure()
+# plt.title("evolution de a")
+# plt.scatter(X, Y)
+# plt.plot(np.arange(len(C)), C[:,0], color='RED')
+# plt.show()
+
+# plt.figure()
+# plt.title("evolution de b")
+# plt.scatter(X, Y)
+# plt.plot(np.arange(len(C)), C[:,1], color='RED')
+# plt.show()
+
+AB = DG_F(X,Y, 1,1, 0.001)[-1]
 plt.figure()
-plt.title("evolution de b")
-plt.scatter(X, Y)
-plt.plot(np.arange(len(C)), C[:,1], color='RED')
-plt.show()
+plt.scatter(X,Y_noise, color='blue')
+plt.plot([min(X), max(X)], [AB[0]*min(X)+ AB[1], AB[0]*max(X)+AB[1]] , color='red')
