@@ -77,11 +77,23 @@ plt.figure()
 plt.figsize = (20,20)
 for j in visualisation :
     i+=1
-    plt.subplot(1,5,i)
+    plt.subplot(1,6,i)
     plt.scatter(list(range(len(j))), j, color='blue')
     plt.plot(list(range(len(j))), j, color='red')
     plt.xlabel("epoch")
     plt.ylabel("x trouvé")
+    if visualisation.index(j)==0 :
+        plt.title('DG_E(5, 0.001)')
+    elif visualisation.index(j)==1 :
+        plt.title('DG_E(5, 0.01)')
+    elif visualisation.index(j)==2 :
+        plt.title('DG_E(5, 0.1)')
+    elif visualisation.index(j)==3 :
+        plt.title('DG_E(5, 0.17)')
+    elif visualisation.index(j)==4 :
+        plt.title('DG_E(5, 1)')
+    else :
+        plt.title('DG_E(0, 0.001)')
 plt.subplots_adjust(left=0.1, 
                     bottom=0.1,  
                     right=3.5,  
