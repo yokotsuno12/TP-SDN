@@ -85,17 +85,17 @@ for j in visualisation:
     plt.xlabel("epoch")
     plt.ylabel("x trouvé")
     if visualisation.index(j) == 0:
-        plt.title('DG_E(5, 0.001)')
+        plt.title('DG_E(5, 0.001) ' + str(len(j)) + " iterations")
     elif visualisation.index(j) == 1:
-        plt.title('DG_E(5, 0.01)')
+        plt.title('DG_E(5, 0.01) ' + str(len(j)) + " iterations")
     elif visualisation.index(j) == 2:
-        plt.title('DG_E(5, 0.1)')
+        plt.title('DG_E(5, 0.1) ' + str(len(j)) + " iterations")
     elif visualisation.index(j) == 3:
-        plt.title('DG_E(5, 0.17)')
+        plt.title('DG_E(5, 0.17) ' + str(len(j)) + " iterations")
     elif visualisation.index(j) == 4:
-        plt.title('DG_E(5, 1)')
+        plt.title('DG_E(5, 1) ' + str(len(j)) + " iterations")
     else:
-        plt.title('DG_E(0, 0.001)')
+        plt.title('DG_E(0, 0.001) ' + str(len(j)) + " iterations")
 
 plt.subplots_adjust(left=0.1,
                     bottom=0.1,
@@ -141,8 +141,6 @@ plt.ylabel("x trouvé")
 plt.show()
 
 #### Maintenant, on va tester tous ça opur des valeurs différentes :
-
-
 
 for nu in (10**-i for i in reversed(range(1, 4))):
     plt.figure()
