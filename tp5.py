@@ -259,3 +259,11 @@ def DG_F(X,Y,a_0, b_0, nu):
         else :
             pass
     return C
+#### Note pour les autres : Ici on va rencontrer un problème : Dès qu'on va changer la valeur de nb_max (en 500 par ex), d'epsilon (en 0.1 par ex je crois) ou de nu, l'algorithme ne va pas marcher. Je ne comprends pas encore pourquoi (ici Pépita). Ca m'affiche "array must not contain infs or NaNs". :/ Pb avec la distance euclidienne, je crois. 
+
+nb_max = 100
+epsilon = 0.01
+
+plt.plot(list(range(len(DG_F(X, Y, 1,1, 0.001)))), DG_F(X,Y, 1,1, 0.001) , color='RED')
+
+DG_F(X,Y, 1,1, 0.001)
