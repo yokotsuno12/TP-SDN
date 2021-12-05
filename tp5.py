@@ -34,7 +34,7 @@ def Eprime(x):
 epsilon = 0.01
 nb_max = 1000
 
-
+# 2.\\
 def DG_E(x_0, nu):
     L = []
     L.append(x_0)
@@ -47,7 +47,7 @@ def DG_E(x_0, nu):
             pass
     return L
 
-
+# 3.\\
 X = np.arange(0.5, 5.3, 0.01)
 min_locaux_X = []
 Y_Eprime = Eprime(X)
@@ -66,6 +66,7 @@ plt.title("Visualisation de la fonction E")
 plt.xlabel("X")
 plt.ylabel("E(X)")
 plt.show()
+
 
 DG_a = DG_E(5, 0.001)
 DG_b = DG_E(5, 0.01)
@@ -241,7 +242,7 @@ plt.show()
 
 
 ## Descente de gradient pour la régression linéaire
-
+# 1.\\
 def Ychapeau(X, a, b) : 
     Ychap = []
     for i in range(len(X)) :
@@ -266,7 +267,7 @@ def F_prim_b(X,Y,a,b) :
         s+=2*(b + Y[i] - a*X[i])
     return s
 
-
+# 2.\\
 def DG_F(X,Y,a_0, b_0, nu, nb_max = 100): 
     A = []
     B = []
