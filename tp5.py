@@ -282,12 +282,11 @@ def DG_F(X,Y,a_0, b_0, nu, nb_max = 100):
         # On sort de la fonction si la divergence est trop importante
         if abs(a) > 10**20 or abs(b) > 10**20:
             return np.array(C)
-        if epsilon > distance.euclidean((A[-1], B[-1]), (A[-2], B[-2])):
+        elif epsilon > distance.euclidean((A[-1], B[-1]), (A[-2], B[-2])):
             return np.array(C)
         else:
             pass
     return np.array(C)
-#### Note pour les autres : Ici on va rencontrer un problème : Dès qu'on va changer la valeur de nb_max (en 500 par ex), d'epsilon (en 0.1 par ex je crois) ou de nu, l'algorithme ne va pas marcher. Je ne comprends pas encore pourquoi (ici Pépita). Ca m'affiche "array must not contain infs or NaNs". :/ Pb avec la distance euclidienne, je crois. 
 
 
 nb_max = 100
