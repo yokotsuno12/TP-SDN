@@ -75,6 +75,12 @@ DG_d = DG_E(5, 0.17)
 #DG_e = DG_E(5, 1)
 DG_f = DG_E(0, 0.001)
 visualisation = [DG_a, DG_b, DG_c, DG_d, DG_f]
+for i,e in enumerate(visualisation):
+    print("descente de gradient pour", chr(ord("a") + i))
+    print("   minimum trouvé :", e[-1])
+    print("   itération :", len(e))
+    print("   E(xmin) :", E(x))
+
 
 # Autre manière pour les visualiser toutes d'un coup ;)
 i = 0
@@ -164,77 +170,6 @@ for nu in (10**-i for i in reversed(range(1, 4))):
                         wspace=0.4,
                         hspace=0.4)
 plt.show()
-# i=0
-# plt.figure()
-# plt.figsize = (20, 20)
-# for j in range(5):
-#     i += 1
-#     plt.subplot(1, 6, i)
-#     plt.scatter(list(range(len(DG_E(j,0.001)))), DG_E(j,0.001), color='blue')
-#     plt.plot(list(range(len(DG_E(j,0.001)))), DG_E(j,0.001), color='red')
-#     plt.xlabel("epoch")
-#     plt.ylabel("x trouvé")
-#     plt.title(j)
-# plt.subplots_adjust(left=0.1, 
-#                     bottom=0.1,  
-#                     right=3.5,  
-#                     top=1,  
-#                     wspace=0.4,  
-#                     hspace=0.4)
-
-# i=0
-# plt.figure()
-# plt.figsize = (20, 20)
-# for j in range(5):
-#     i += 1
-#     plt.subplot(1, 6, i)
-#     plt.scatter(list(range(len(DG_E(j,0.01)))), DG_E(j,0.01), color='blue')
-#     plt.plot(list(range(len(DG_E(j,0.01)))), DG_E(j,0.01), color='red')
-#     plt.xlabel("epoch")
-#     plt.ylabel("x trouvé")
-#     plt.title(j)
-# plt.subplots_adjust(left=0.1, 
-#                     bottom=0.1,  
-#                     right=3.5,  
-#                     top=1,  
-#                     wspace=0.4,  
-#                     hspace=0.4)
-
-# i=0
-# plt.figure()
-# plt.figsize = (20,20)
-# for j in range(5) : 
-#     i+=1
-#     plt.subplot(1,6,i)
-#     plt.scatter(list(range(len(DG_E(j,0.1)))), DG_E(j,0.1), color='blue')
-#     plt.plot(list(range(len(DG_E(j,0.1)))), DG_E(j,0.1), color='red')
-#     plt.xlabel("epoch")
-#     plt.ylabel("x trouvé")
-#     plt.title(j)
-# plt.subplots_adjust(left=0.1, 
-#                     bottom=0.1,  
-#                     right=3.5,  
-#                     top=1,  
-#                     wspace=0.4,  
-#                     hspace=0.4)
-
-# i=0
-# plt.figure()
-# plt.figsize = (20,20)
-# for j in range(5) : 
-#     i+=1
-#     plt.subplot(1,6,i)
-#     plt.scatter(list(range(len(DG_E(j,0.1)))), DG_E(j,0.1), color='blue')
-#     plt.plot(list(range(len(DG_E(j,0.1)))), DG_E(j,0.1), color='red')
-#     plt.xlabel("epoch")
-#     plt.ylabel("x trouvé")
-#     plt.title(j)
-# plt.subplots_adjust(left=0.1, 
-#                     bottom=0.1,  
-#                     right=3.5,  
-#                     top=1,  
-#                     wspace=0.4,  
-#                     hspace=0.4)
 
 #### !! Attention aux échelles !! Il faut bien regarder 
 
@@ -258,14 +193,26 @@ def F(X, Y, a, b):
 def F_prim_a(X,Y,a,b) :
     s = 0
     for i in range(len(X)):
-        s+=2*(a*X[i]**2 - X[i]*(b+Y[i]))
+        s+=2*(a*X[i]**2 + X[i]*(b-Y[i]))
     return s
 
 def F_prim_b(X,Y,a,b) :
     s = 0
     for i in range(len(X)):
-        s+=2*(b + Y[i] - a*X[i])
+        s+=2*(b - Y[i] + a*X[i])
     return s
+
+# def F_prim_b(X,Y,a,b) :
+#     s = 0
+#     for i in range(len(X)):
+#         s+=2*(b - Y[i] + a*X[i])
+#     return s
+
+# def F_prim_a(X,Y,a,b) :
+#     s = 0
+#     for i in range(len(X)):
+#         s+=2*(a*X[i]**2 - X[i]*(b+Y[i]))
+#     return s
 
 # 2.\\
 def DG_F(X,Y,a_0, b_0, nu, nb_max = 100): 
@@ -331,7 +278,6 @@ for nu, epoch in ((0.001, 100),
 reg_scipy = linregress(X, Y_noise)
 A_scipy, B_scipy = reg_scipy.slope, reg_scipy.intercept
 A, B = DG_F(X, Y_noise, 1, 1, 0.001, 100)[-1]
-B *= -1  # Le signe de B est inversé (on sait pas pourquoi)
 print(A, B)
 print(A_scipy, B_scipy)
 
