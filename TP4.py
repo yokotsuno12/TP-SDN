@@ -81,21 +81,21 @@ def kmoyenne(data, k):
 
 
 # Test sur Iris avec notre fonction
+pca = PCA(n_components=2)
+pca = pca.fit(X)
+X_pca = pca.transform(X)
 prediction = kmoyenne(X, 3)
 plt.title("Representation des données, reduction de dimension avec kmoyenne")
-plt.scatter(X[:, 0], X[:, 1], c=prediction)
-plt.scatter(baricentre(X, prediction)[:, 0],
-            baricentre(X, prediction)[:, 1], c='red')
+plt.scatter(X_pca[:, 0], X_pca[:, 1], c=prediction)
 plt.show()
 
 # #Test sur Iris avec kmeans sklearn
 kmeans = KMeans(n_clusters=3).fit(X)
 centroid = kmeans.cluster_centers_
 plt.title("Representation des données avec Kmeans")
-plt.scatter(X[:, 0], X[:, 1], c=kmeans.labels_)
+plt.scatter(X_pca[:, 0], X_pca[:, 1], c=kmeans.labels_)
 
 
-plt.scatter(centroid[:, 0], centroid[:, 1], c='red')
 plt.show()
 
 # 2

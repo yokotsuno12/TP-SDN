@@ -113,41 +113,41 @@ plt.subplots_adjust(left=0.1,
                     wspace=0.4,
                     hspace=0.4)
 
-for j in visualisation:
-    print(len(j))
+# for j in visualisation:
+#     print(len(j))
 
-plt.plot(list(range(len(DG_a))), DG_a, color='blue')
-plt.title("x0 = 5 et nu = 0.001")
-plt.xlabel("epoch")
-plt.ylabel("x trouvé")
-plt.show()
+# plt.plot(list(range(len(DG_a))), DG_a, color='blue')
+# plt.title("x0 = 5 et nu = 0.001")
+# plt.xlabel("epoch")
+# plt.ylabel("x trouvé")
+# plt.show()
 
-plt.plot(list(range(len(DG_b))), DG_b, color='green')
-plt.title("x0 = 5 et nu = 0.01")
-plt.xlabel("epoch")
-plt.ylabel("x trouvé")
-plt.show()
+# plt.plot(list(range(len(DG_b))), DG_b, color='green')
+# plt.title("x0 = 5 et nu = 0.01")
+# plt.xlabel("epoch")
+# plt.ylabel("x trouvé")
+# plt.show()
 
-plt.plot(list(range(len(DG_c))), DG_c, color='yellow')
-plt.title("x0 = 5 et nu = 0.1")
-plt.xlabel("epoch")
-plt.ylabel("x trouvé")
-plt.show()
+# plt.plot(list(range(len(DG_c))), DG_c, color='yellow')
+# plt.title("x0 = 5 et nu = 0.1")
+# plt.xlabel("epoch")
+# plt.ylabel("x trouvé")
+# plt.show()
 
-plt.plot(list(range(len(DG_d))), DG_d, color='orange')
-plt.title("x0 = 5 et nu = 0.17")
-plt.xlabel("epoch")
-plt.ylabel("x trouvé")
-plt.show()
+# plt.plot(list(range(len(DG_d))), DG_d, color='orange')
+# plt.title("x0 = 5 et nu = 0.17")
+# plt.xlabel("epoch")
+# plt.ylabel("x trouvé")
+# plt.show()
 
-#plt.plot(list(range(len(DG_e))), DG_e, color='red')
-#plt.show()
+# #plt.plot(list(range(len(DG_e))), DG_e, color='red')
+# #plt.show()
 
-plt.plot(list(range(len(DG_f))), DG_f, color='purple')
-plt.title("x0 = 0 et nu = 0.001")
-plt.xlabel("epoch")
-plt.ylabel("x trouvé")
-plt.show()
+# plt.plot(list(range(len(DG_f))), DG_f, color='purple')
+# plt.title("x0 = 0 et nu = 0.001")
+# plt.xlabel("epoch")
+# plt.ylabel("x trouvé")
+# plt.show()
 
 
 #### Maintenant, on va tester tout ça pour des valeurs différentes :
@@ -171,35 +171,40 @@ for nu in (10**-i for i in reversed(range(1, 4))):
                         hspace=0.4)
 plt.show()
 
-#### !! Attention aux échelles !! Il faut bien regarder 
+#### !! Attention aux échelles !! Il faut bien regarder
 
 # DESCENTE DE GRADIENT POUR LA REGRESSION LINEAIRE
 
 
 ## Descente de gradient pour la régression linéaire
 # 1.\\
+
+
 def Ychapeau(X, a, b) : 
     Ychap = []
-    for i in range(len(X)) :
+    for i in range(len(X)):
         Ychap.append(a*X[i]+b)
     return Ychap
+
 
 def F(X, Y, a, b):
     s = 0
     for i in range(len(X)):
-        s+=(Ychapeau(X, a,b)[i]-Y[i])**2 #(ax_i -b - y_i)^2 = (ax_i)^2 -2*a*x_i(b+y_i) +(b+y_i)^2
+        s += (Ychapeau(X, a,b)[i]-Y[i])**2 #(ax_i -b - y_i)^2 = (ax_i)^2 -2*a*x_i(b+y_i) +(b+y_i)^2
     return s
+
 
 def F_prim_a(X,Y,a,b) :
     s = 0
     for i in range(len(X)):
-        s+=2*(a*X[i]**2 + X[i]*(b-Y[i]))
+        s += 2*(a*X[i]**2 + X[i]*(b-Y[i]))
     return s
+
 
 def F_prim_b(X,Y,a,b) :
     s = 0
     for i in range(len(X)):
-        s+=2*(b - Y[i] + a*X[i])
+        s += 2*(b - Y[i] + a*X[i])
     return s
 
 # def F_prim_b(X,Y,a,b) :
@@ -268,7 +273,7 @@ for nu, epoch in ((0.001, 100),
     plt.figure(figsize=(12, 8))
     C = DG_F(X,Y_noise, 1,1, nu, epoch)
     A, B = C[-1]
-    B *= -1  # Le signe de B est inversé (on sait pas pourquoi)
+    B *= 1  # Le signe de B est inversé (on sait pas pourquoi)
     plt.title("nu = {}, epoch = {}".format(nu, len(C)))
     plt.xlabel("fonction de regression : f(x) = {:0.3e}x + {:0.3e}".format(A, B))
     plt.scatter(X, Y_noise, color='blue')
